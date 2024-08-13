@@ -81,4 +81,26 @@ CREATE INDEX publikation_complex_id_fk_index ON publikation(complex_id);
 CREATE INDEX publikation_sub_id_fk_index ON publikation(sub_id);
 -- Indexing der Relationen in publikation
 
+-- Skript zum Füllen der Tabellen
+CREATE TEMP TABLE csv_import (complex_id INTEGER, complex_name text, organismus text, synonyme text, zellinie text, uniprot_id text, 
+entrez_id text, purification text, go_id text, go_description text, funcat_id text, funcat_desciption text, pubmed INTEGER, 
+comment_c text, comment_d text, comment_s text, swiss_organismus text, name_sub text, gen_sub text, gen_sub_synonym text);
+.separator "\t"
+.import C:/Users/davidmolter/Documents/Master_Synth._Biotechnologie/SoSe24/SDAM/CORUM/allComplexes.txt allComplexes
+
+INSERT INTO complexinfo (complexid, name, synonym, organismus, cell line) SELECT complex_id, complex_name, synonyme, organismus, zelllinie
+    FROM csv_import WHERE 1;
+INSERT INTO untereinheiten (name, organismus, gen, gen_synonym, uniprot_id, entrez_id, complex_id) SELECT name_sub, swiss_organismus, gen_sub, gen_sub_synonym, uniprot_id, entrez_id, complex_id
+    FROM csv_import WHERE 1;
+INSERT INTO funktion (complex_id) SELECT complex_id
+    FROM csv_import WHERE 1;
+INSERT INTO funcat (funcatid, fundescription) SELECT funcat_id, funcat_description
+    FROM csv_import WHERE 1;
+INSERT INTO go (goid, godescription) SELECT go_id, go_description
+    FROM csv_import WHERE 1;
+INSERT INTO publikation (purification, complex_comment, disease_comment, sub_comment, pubmed_id, complex_id) SELECT purification, comment_c, comment_d, comment_s, pubmed, complex_id
+    FROM csv_import WHERE 1;
+
+DROP TABLE csv_import;
+
 COMMIT;

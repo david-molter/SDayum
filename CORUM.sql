@@ -73,7 +73,7 @@ CREATE INDEX untereinheiten_pub_id_fk_index ON untereinheiten(pub_id);
 -- Indexing der Relationen in untereinheiten
 
 CREATE INDEX funktion_complex_id_fk_index ON funktion(complex_id);
-CREATE INDEX funktion_complex_id_fk_index ON funktion(funcat_id);
+CREATE INDEX funktion_funcat_id_fk_index ON funktion(funcat_id);
 CREATE INDEX funktion_go_id_fk_index ON funktion(go_id);
 -- Indexing der Relationen in funktion
 

@@ -86,7 +86,7 @@ CREATE TEMP TABLE csv_import (complex_id INTEGER, complex_name text, organismus 
 entrez_id text, purification text, go_id text, go_description text, funcat_id text, funcat_desciption text, pubmed INTEGER, 
 comment_c text, comment_d text, comment_s text, swiss_organismus text, name_sub text, gen_sub text, gen_sub_synonym text);
 .separator ","
-.import allComplexes.txt csv_import
+.import allComplexes.CSV csv_import
 
 INSERT INTO complexinfo (complexid, name, synonym, organismus, cell line) SELECT complex_id, complex_name, synonyme, organismus, zelllinie
     FROM csv_import WHERE 1;

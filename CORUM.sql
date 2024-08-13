@@ -85,8 +85,8 @@ CREATE INDEX publikation_sub_id_fk_index ON publikation(sub_id);
 CREATE TEMP TABLE csv_import (complex_id INTEGER, complex_name text, organismus text, synonyme text, zellinie text, uniprot_id text, 
 entrez_id text, purification text, go_id text, go_description text, funcat_id text, funcat_desciption text, pubmed INTEGER, 
 comment_c text, comment_d text, comment_s text, swiss_organismus text, name_sub text, gen_sub text, gen_sub_synonym text);
-.separator ","
-.import allComplexes.CSV csv_import
+.separator "\t"
+.import allComplexes.txt csv_import
 
 INSERT INTO complexinfo (complexid, name, synonym, organismus, cell line) SELECT complex_id, complex_name, synonyme, organismus, zelllinie
     FROM csv_import WHERE 1;

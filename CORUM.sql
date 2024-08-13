@@ -62,6 +62,23 @@ BEGIN;
 
 -- Definition der Relationen zwischen den oben eingefügten Datenmodellen
 
+--Indexing:
+CREATE INDEX complexinfo_sub_id_fk_index ON complexinfo(sub_id);
+CREATE INDEX complexinfo_fun_id_fk_index ON complexinfo(fun_id);
+CREATE INDEX complexinfo_pub_id_fk_index ON complexinfo(pub_id);
+-- Indexing der Relationen in complexinfo
 
+CREATE INDEX untereinheiten_sub_id_fk_index ON untereinheiten(complex_id);
+CREATE INDEX untereinheiten_pub_id_fk_index ON untereinheiten(pub_id);
+-- Indexing der Relationen in untereinheiten
+
+CREATE INDEX funktion_complex_id_fk_index ON funktion(complex_id);
+CREATE INDEX funktion_complex_id_fk_index ON funktion(funcat_id);
+CREATE INDEX funktion_go_id_fk_index ON funktion(go_id);
+-- Indexing der Relationen in funktion
+
+CREATE INDEX publikation_complex_id_fk_index ON publikation(complex_id);
+CREATE INDEX publikation_sub_id_fk_index ON publikation(sub_id);
+-- Indexing der Relationen in publikation
 
 COMMIT;

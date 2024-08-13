@@ -1,4 +1,4 @@
-Begin;
+BEGIN;
     CREATE TABLE complexinfo (
         complexid INTEGER PRIMARY KEY AUTOINCREMENT,
         name VARCHAR(250) NOT NULL,
@@ -6,10 +6,10 @@ Begin;
         organismus VARCHAR(250) NOT Null,
         cell line VARCHAR(250) NOT NULL,
         sub_id INTEGER NOT NULL,
-        FOREIGN KEY (sub_id) REFERENCES untereinheiten(subid),
         fun_id INTEGER NOT NULL,
-        FOREIGN KEY (fun_id) REFERENCES funcat(funcatid),
         pub_id INTEGER NOT NULL,
+        FOREIGN KEY (sub_id) REFERENCES untereinheiten(subid),
+        FOREIGN KEY (fun_id) REFERENCES funcat(funcatid),
         FOREIGN KEY (pub_id) REFERENCES publikation(pubid)
     );
 
@@ -22,18 +22,18 @@ Begin;
         uniprot_id VARCHAR(250) NOT NULL,
         entrez_id VARCHAR(250) NOT NULL,
         complex_id INTEGER NOT NULL,
-        FOREIGN KEY (complex_id) REFERENCES complexinfo(complexid),
         pub_id INTEGER NOT NULL,
+        FOREIGN KEY (complex_id) REFERENCES complexinfo(complexid),
         FOREIGN KEY (pub_id) REFERENCES publikation(pubid)
         );
 
     CREATE TABLE funktion (
         funid INTEGER PRIMARY KEY AUTOINCREMENT,
         complex_id INTEGER NOT NULL,
-        FOREIGN KEY (complex_id) REFERENCES complexinfo(complexid),
         funcat_id INTEGER NOT NULL,
-        FOREIGN KEY (funcat_id) REFERENCES funcat(funcatid),
         go_id INTEGER NOT NULL,
+        FOREIGN KEY (complex_id) REFERENCES complexinfo(complexid),
+        FOREIGN KEY (funcat_id) REFERENCES funcat(funcatid),
         FOREIGN KEY (go_id) REFERENCES go(goid)
         );
 
@@ -55,8 +55,8 @@ Begin;
         sub_comment VARCHAR(250) NOT NULL,
         pubmed_id VARCHAR(250) NOT NULL,
         complex_id INTEGER NOT NULL,
-        FOREIGN KEY (complex_id) REFERENCES complexinfo(complexid),
         sub_id INTEGER NOT NULL,
+        FOREIGN KEY (complex_id) REFERENCES complexinfo(complexid),
         FOREIGN KEY (sub_id) REFERENCES untereinheiten(subid)
         );
 

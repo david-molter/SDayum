@@ -4,7 +4,7 @@ BEGIN;
         name VARCHAR(250) NOT NULL,
         synonym VARCHAR(250) NOT Null,
         organismus VARCHAR(250) NOT Null,
-        cell line VARCHAR(250) NOT NULL,
+        cell_line VARCHAR(250) NOT NULL,
         sub_id INTEGER NOT NULL,
         fun_id INTEGER NOT NULL,
         pub_id INTEGER NOT NULL,

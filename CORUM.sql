@@ -84,17 +84,22 @@ CREATE INDEX publikation_sub_id_fk_index ON publikation(sub_id);
 -- Skript zum Füllen der Tabellen: 
 -- 1. Erstellen einer temporären Tabelle und import des ausgegebenen CORUM-Datensatzes f. alle Komplexe
 -- 2. Einfügen der zutreffenden Spalten in die jeweiligen Tabellen der DB
+-- 3. Löschen der temporären Tabelle csv_import über DROP TABLE
 CREATE TEMP TABLE csv_import (complex_id INTEGER, complex_name text, organismus text, synonyme text, zelllinie text, uniprot_id text, 
 entrez_id text, purification text, go_id text, go_description text, funcat_id text, funcat_desciption text, pubmed INTEGER, 
-comment_c text, comment_d text, comment_s text, swiss_organismus text, name_sub text, gen_sub text, gen_sub_synonym text);
+comment_c text, comment_d text, comment_s text, swiss_organismus text, name_sub text, gen_sub text, gen_sub_synonym text, subid INTEGER, 
+funid INTEGER, pubid INTEGER);
 .mode csv
 .separator ";"
 .import C:/SDAM/CORUM/allComplexes.CSV csv_import 
 --NOTE:Importing file from local directory successful on Windows
 
--- NOTE: still trouble from now on
-INSERT INTO complexinfo (complexid, name, synonym, organismus, cell_line) SELECT complex_id, complex_name, synonyme, organismus, zelllinie
+INSERT INTO complexinfo (complexid, name, synonym, organismus, cell_line, sub_id, fun_id, pub_id) SELECT complex_id, complex_name, synonyme, organismus, zelllinie, subid, funid, pubid
     FROM csv_import WHERE 1;
+
+-- NOTE: 
+-- 1. To Debug: Added  columns subid, funid and pubid to csv_import, and colums sub_id, fun_id, pub_id to INSERT INTO complexinfo-statement
+-- 2. Changes/corrections from above have to be implemented in following statements to debug code
 INSERT INTO untereinheiten (name, organismus, gen, gen_synonym, uniprot_id, entrez_id, complex_id) SELECT name_sub, swiss_organismus, gen_sub, gen_sub_synonym, uniprot_id, entrez_id, complex_id
     FROM csv_import WHERE 1;
 INSERT INTO funktion (complex_id) SELECT complex_id

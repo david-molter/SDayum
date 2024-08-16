@@ -91,8 +91,10 @@ comment_c text, comment_d text, comment_s text, swiss_organismus text, name_sub 
 funid INTEGER, pubid INTEGER);
 .mode csv
 .separator ";"
-.import C:/SDAM/CORUM/allComplexes.CSV csv_import 
+.import C:/SDAM/CORUM/allComplexes_mod_noheaders.CSV csv_import 
 --NOTE:Importing file from local directory successful on Windows
+-- In CSV: Removed Column headers for improved Import and added Columns 
+--         for fun_id, sub_id and pub_id (copied column complex_id)
 
 INSERT INTO complexinfo (complexid, name, synonym, organismus, cell_line, sub_id, fun_id, pub_id) SELECT complex_id, complex_name, synonyme, organismus, zelllinie, subid, funid, pubid
     FROM csv_import WHERE 1;
@@ -116,6 +118,7 @@ DROP TABLE csv_import;
 
 COMMIT;
 
+-- DROP TABLE Statements to clear DB during testing, have to be moved to comments in final version
 DROP TABLE complexinfo;
 DROP Table untereinheiten;
 DROP Table funktion;

@@ -86,7 +86,7 @@ CREATE INDEX publikation_sub_id_fk_index ON publikation(sub_id);
 -- 2. Einfügen der zutreffenden Spalten in die jeweiligen Tabellen der DB
 -- 3. Löschen der temporären Tabelle csv_import über DROP TABLE
 CREATE TEMP TABLE csv_import (complex_id INTEGER, complex_name text, organismus text, synonyme text, zelllinie text, uniprot_id text, 
-entrez_id text, purification text, go_id text, go_description text, funcat_id text, funcat_desciption text, pubmed INTEGER, 
+entrez_id text, purification text, go_id text, go_description text, funcat_id text, funcat_description text, pubmed INTEGER, 
 comment_c text, comment_d text, comment_s text, swiss_organismus text, name_sub text, gen_sub text, gen_sub_synonym text, subid INTEGER, 
 funid INTEGER, pubid INTEGER);
 .mode csv
@@ -97,20 +97,28 @@ funid INTEGER, pubid INTEGER);
 INSERT INTO complexinfo (complexid, name, synonym, organismus, cell_line, sub_id, fun_id, pub_id) SELECT complex_id, complex_name, synonyme, organismus, zelllinie, subid, funid, pubid
     FROM csv_import WHERE 1;
 
--- NOTE: 
--- 1. To Debug: Added  columns subid, funid and pubid to csv_import, and colums sub_id, fun_id, pub_id to INSERT INTO complexinfo-statement
--- 2. Changes/corrections from above have to be implemented in following statements to debug code
-INSERT INTO untereinheiten (name, organismus, gen, gen_synonym, uniprot_id, entrez_id, complex_id) SELECT name_sub, swiss_organismus, gen_sub, gen_sub_synonym, uniprot_id, entrez_id, complex_id
+-- NOTE: To Debug: Added  columns subid, funid and pubid to csv_import, and colums sub_id, fun_id, pub_id 
+--       to INSERT INTO complexinfo-statement and applied fix to other Tables
+INSERT INTO untereinheiten (subid, name, organismus, gen, gen_synonym, uniprot_id, entrez_id, complex_id, pub_id) SELECT subid, name_sub, swiss_organismus, gen_sub, gen_sub_synonym, uniprot_id, entrez_id, complex_id, pubid
     FROM csv_import WHERE 1;
-INSERT INTO funktion (complex_id) SELECT complex_id
+INSERT INTO funktion (funid, complex_id, funcat_id, go_id) SELECT funid, complex_id, funcat_id, go_id
     FROM csv_import WHERE 1;
 INSERT INTO funcat (funcatid, fundescription) SELECT funcat_id, funcat_description
     FROM csv_import WHERE 1;
+    -- Datatype mismatch: funcatid ist integer, funcat_id ist aber text, in csv-datei ist es String aus zahlen (text), muss noch geändert werden
 INSERT INTO go (goid, godescription) SELECT go_id, go_description
-    FROM csv_import WHERE 1;
-INSERT INTO publikation (purification, complex_comment, disease_comment, sub_comment, pubmed_id, complex_id) SELECT purification, comment_c, comment_d, comment_s, pubmed, complex_id
+    FROM csv_import WHERE 1; --> Siehe Problem bei funcat-Tabelle: Datatype mismatch
+INSERT INTO publikation (pubid, purification, complex_comment, disease_comment, sub_comment, pubmed_id, complex_id, sub_id) 
+SELECT pubid, purification, comment_c, comment_d, comment_s, pubmed, complex_id, subid
     FROM csv_import WHERE 1;
 
 DROP TABLE csv_import;
 
 COMMIT;
+
+DROP TABLE complexinfo;
+DROP Table untereinheiten;
+DROP Table funktion;
+DROP Table funcat;
+DROP TABLE go;
+DROP TABLE publikation;

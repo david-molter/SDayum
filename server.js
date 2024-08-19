@@ -9,8 +9,11 @@ app.use(express.urlencoded({
 }))
 
 //Verbindung zu SQLite-Datenbanken
-const sqite = require('sqlite')
+const sqlite = require('sqlite')
 const sqlite3 = require('sqlite3')
 
 //Rendern von HTML-Vorlagen
-const ejs = require('eja')
+const ejs = require('ejs')
+
+//
+const port = 1337

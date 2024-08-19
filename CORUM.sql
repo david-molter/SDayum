@@ -1,4 +1,4 @@
--- Active: 1724068223470@@127.0.0.1@3306
+
 
 BEGIN;
     CREATE TABLE complexinfo (
@@ -31,11 +31,11 @@ BEGIN;
 
     CREATE TABLE funktion (
         funid INTEGER PRIMARY KEY AUTOINCREMENT,
-        complex_id INTEGER NOT NULL,
         funcat_id  VARCHAR(250) NOT NULL,
         fundescription VARCHAR(250) NOT NULL,
         go_id VARCHAR(250) NOT NULL,
         godescription VARCHAR(250) NOT NULL,
+        complex_id INTEGER NOT NULL,
         FOREIGN KEY (complex_id) REFERENCES complexinfo(complexid)
         );
 
@@ -87,13 +87,13 @@ CREATE INDEX publikation_sub_id_fk_index ON publikation(sub_id);
 -- 1. Erstellen einer temporären Tabelle und import des ausgegebenen CORUM-Datensatzes f. alle Komplexe
 -- 2. Einfügen der zutreffenden Spalten in die jeweiligen Tabellen der DB
 -- 3. Löschen der temporären Tabelle csv_import über DROP TABLE
-CREATE TEMP TABLE csv_import (complex_id INTEGER, complex_name text, organismus text, synonyme text, zelllinie text, uniprot_id text, 
+CREATE TABLE csv_import (complex_id INTEGER, complex_name text, organismus text, synonyme text, zelllinie text, uniprot_id text, 
 entrez_id text, purification text, go_id text, go_description text, funcat_id text, funcat_description text, pubmed INTEGER, 
 comment_c text, comment_d text, comment_s text, swiss_organismus text, name_sub text, gen_sub text, gen_sub_synonym text, subid INTEGER, 
 funid INTEGER, pubid INTEGER);
 .mode csv
 .separator ";"
-.import /Users/davidmolter/Documents/M_Biotechnologie/SoSe24/SDAM/Prüfungsleistung csv_import
+.import /Users/davidmolter/Documents/M_Biotechnologie/SoSe24/SDAM/Prüfungsleistung/allComplexes_mod_noheaders.CSV csv_import
 --.import C:/SDAM/CORUM/allComplexes_mod_noheaders.CSV 
 --NOTE: For Importing file from local directory (Windows)
 -- In CSV: Removed Column headers for improved Import and added Columns 
@@ -106,7 +106,7 @@ INSERT INTO complexinfo (complexid, name, synonym, organismus, cell_line, sub_id
 --       to INSERT INTO complexinfo-statement and applied fix to other Tables
 INSERT INTO untereinheiten (subid, name, organismus, gen, gen_synonym, uniprot_id, entrez_id, complex_id, pub_id) SELECT subid, name_sub, swiss_organismus, gen_sub, gen_sub_synonym, uniprot_id, entrez_id, complex_id, pubid
     FROM csv_import WHERE 1;
-INSERT INTO funktion (funid, complex_id, funcat_id, fundescription, go_id, godescription) SELECT funid, complex_id, funcat_id, funcat_description, go_id, go_description
+INSERT INTO funktion (funid, funcat_id, fundescription, go_id, godescription, complex_id) SELECT funid, funcat_id, funcat_description, go_id, go_description, complex_id
     FROM csv_import WHERE 1;
 --INSERT INTO funcat (funcatid, fundescription) SELECT funcat_id, funcat_description
   --  FROM csv_import WHERE 1;
@@ -126,3 +126,4 @@ DROP TABLE complexinfo;
 DROP Table untereinheiten;
 DROP Table funktion;
 DROP TABLE publikation;
+DROP TABLE csv_import;

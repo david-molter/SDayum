@@ -31,9 +31,9 @@ BEGIN;
     CREATE TABLE funktion (
         funid INTEGER PRIMARY KEY AUTOINCREMENT,
         complex_id INTEGER NOT NULL,
-        funcat_id INTEGER NOT NULL,
+        funcat_id  VARCHAR(250) NOT NULL,
         fundescription VARCHAR(250) NOT NULL,
-        go_id INTEGER NOT NULL,
+        go_id VARCHAR(250) NOT NULL,
         godescription VARCHAR(250) NOT NULL,
         FOREIGN KEY (complex_id) REFERENCES complexinfo(complexid)
         );
@@ -124,6 +124,4 @@ COMMIT;
 DROP TABLE complexinfo;
 DROP Table untereinheiten;
 DROP Table funktion;
-DROP Table funcat;
-DROP TABLE go;
 DROP TABLE publikation;

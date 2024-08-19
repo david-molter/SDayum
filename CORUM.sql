@@ -1,3 +1,4 @@
+-- Active: 1724068223470@@127.0.0.1@3306
 
 BEGIN;
     CREATE TABLE complexinfo (
@@ -92,8 +93,8 @@ comment_c text, comment_d text, comment_s text, swiss_organismus text, name_sub 
 funid INTEGER, pubid INTEGER);
 .mode csv
 .separator ";"
--- .import /Users/davidmolter/Documents/M_Biotechnologie/SoSe24/SDAM/Prüfungsleistung csv_import
-.import C:/SDAM/CORUM/allComplexes_mod_noheaders.CSV 
+.import /Users/davidmolter/Documents/M_Biotechnologie/SoSe24/SDAM/Prüfungsleistung csv_import
+--.import C:/SDAM/CORUM/allComplexes_mod_noheaders.CSV 
 --NOTE: For Importing file from local directory (Windows)
 -- In CSV: Removed Column headers for improved Import and added Columns 
 --         for fun_id, sub_id and pub_id (copied column complex_id)

@@ -91,7 +91,7 @@ comment_c text, comment_d text, comment_s text, swiss_organismus text, name_sub 
 funid INTEGER, pubid INTEGER);
 .mode csv
 .separator ";"
-.import C:/SDAM/CORUM/allComplexes_mod_noheaders.CSV csv_import 
+.import /Users/davidmolter/Documents/M_Biotechnologie/SoSe24/SDAM/Prüfungsleistung csv_import
 --NOTE:Importing file from local directory successful on Windows
 -- In CSV: Removed Column headers for improved Import and added Columns 
 --         for fun_id, sub_id and pub_id (copied column complex_id)

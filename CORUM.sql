@@ -1,3 +1,4 @@
+
 BEGIN;
     CREATE TABLE complexinfo (
         complexid INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -9,7 +10,7 @@ BEGIN;
         fun_id INTEGER NOT NULL,
         pub_id INTEGER NOT NULL,
         FOREIGN KEY (sub_id) REFERENCES untereinheiten(subid),
-        FOREIGN KEY (fun_id) REFERENCES funcat(funcatid),
+        FOREIGN KEY (fun_id) REFERENCES funktion(funid),
         FOREIGN KEY (pub_id) REFERENCES publikation(pubid)
     );
 
@@ -31,21 +32,21 @@ BEGIN;
         funid INTEGER PRIMARY KEY AUTOINCREMENT,
         complex_id INTEGER NOT NULL,
         funcat_id INTEGER NOT NULL,
+        fundescription VARCHAR(250) NOT NULL,
         go_id INTEGER NOT NULL,
-        FOREIGN KEY (complex_id) REFERENCES complexinfo(complexid),
-        FOREIGN KEY (funcat_id) REFERENCES funcat(funcatid),
-        FOREIGN KEY (go_id) REFERENCES go(goid)
+        godescription VARCHAR(250) NOT NULL,
+        FOREIGN KEY (complex_id) REFERENCES complexinfo(complexid)
         );
 
-    CREATE TABLE funcat (
-        funcatid INTEGER PRIMARY KEY AUTOINCREMENT,
-        fundescription VARCHAR(250) NOT NULL
-        );
+   -- CREATE TABLE funcat (
+        --funcatid INTEGER PRIMARY KEY AUTOINCREMENT,
+        --fundescription VARCHAR(250) NOT NULL
+       -- );
 
-    CREATE TABLE go (
-        goid INTEGER PRIMARY KEY AUTOINCREMENT,
-        godescription VARCHAR(250) NOT NULL
-        );
+    --CREATE TABLE go (
+      --  goid INTEGER PRIMARY KEY AUTOINCREMENT,
+        --godescription VARCHAR(250) NOT NULL
+        --);
 
     CREATE TABLE publikation (
         pubid INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -91,8 +92,9 @@ comment_c text, comment_d text, comment_s text, swiss_organismus text, name_sub 
 funid INTEGER, pubid INTEGER);
 .mode csv
 .separator ";"
-.import /Users/davidmolter/Documents/M_Biotechnologie/SoSe24/SDAM/Prüfungsleistung csv_import
---NOTE:Importing file from local directory successful on Windows
+-- .import /Users/davidmolter/Documents/M_Biotechnologie/SoSe24/SDAM/Prüfungsleistung csv_import
+.import C:/SDAM/CORUM/allComplexes_mod_noheaders.CSV 
+--NOTE: For Importing file from local directory (Windows)
 -- In CSV: Removed Column headers for improved Import and added Columns 
 --         for fun_id, sub_id and pub_id (copied column complex_id)
 
@@ -103,13 +105,13 @@ INSERT INTO complexinfo (complexid, name, synonym, organismus, cell_line, sub_id
 --       to INSERT INTO complexinfo-statement and applied fix to other Tables
 INSERT INTO untereinheiten (subid, name, organismus, gen, gen_synonym, uniprot_id, entrez_id, complex_id, pub_id) SELECT subid, name_sub, swiss_organismus, gen_sub, gen_sub_synonym, uniprot_id, entrez_id, complex_id, pubid
     FROM csv_import WHERE 1;
-INSERT INTO funktion (funid, complex_id, funcat_id, go_id) SELECT funid, complex_id, funcat_id, go_id
+INSERT INTO funktion (funid, complex_id, funcat_id, fundescription, go_id, godescription) SELECT funid, complex_id, funcat_id, funcat_description, go_id, go_description
     FROM csv_import WHERE 1;
-INSERT INTO funcat (funcatid, fundescription) SELECT funcat_id, funcat_description
-    FROM csv_import WHERE 1;
+--INSERT INTO funcat (funcatid, fundescription) SELECT funcat_id, funcat_description
+  --  FROM csv_import WHERE 1;
     -- Datatype mismatch: funcatid ist integer, funcat_id ist aber text, in csv-datei ist es String aus zahlen (text), muss noch geändert werden
-INSERT INTO go (goid, godescription) SELECT go_id, go_description
-    FROM csv_import WHERE 1; --> Siehe Problem bei funcat-Tabelle: Datatype mismatch
+--INSERT INTO go (goid, godescription) SELECT go_id, go_description
+  --  FROM csv_import WHERE 1; --> Siehe Problem bei funcat-Tabelle: Datatype mismatch
 INSERT INTO publikation (pubid, purification, complex_comment, disease_comment, sub_comment, pubmed_id, complex_id, sub_id) 
 SELECT pubid, purification, comment_c, comment_d, comment_s, pubmed, complex_id, subid
     FROM csv_import WHERE 1;

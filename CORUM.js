@@ -32,11 +32,11 @@ class Proteinkomplex{
         const db_res = await db_connection.run(sql,
             keyValuePairs.complexid, keyValuePairs.name, keyValuePairs.synonym, keyValuePairs.organismus,
             keyValuePairs.cell_line, keyValuePairs.sub_id, keyValuePairs.fun_id, keyValuePairs.pub_id);
-        const new_Preoteinkomplex = await db_connection.get(
+        const new_Proteinkomplex = await db_connection.get(
             'SELECT * FROM Proteinkomplexe WHERE complexid = ?',
             keyValuePairs.complexid
         );
-        return new_Preoteinkomplex;
+        return new_Proteinkomplex;
     }
 
     //Lesen eines Eintrags aus der Database
@@ -49,7 +49,7 @@ class Proteinkomplex{
 
     //Auslesen eines Proteinkomplex Eintrags
     static async search(search_arg, order_arg, pagination_arg, db_connection) {
-        const searchSql = (search_arg !== undefined && search_arg !== null) ? search_arg.translateToSQL(search_arg) : "SELECT complexid, name, synonym, organismus, cell_line, sub_id, fun_id, pub_id FROM Proteinkomplexe";
+        const searchSql = (search_arg !== undefined && search_arg !== null) ? search_arg.translateToSQL(search_arg) : "SELECT complexid, name, synonym, organismus, cell_line, sub_id, fun_id, pub_id FROM complexinfo";
         console.log(`SQL genereated to search Proteinkomplexe records:\n${JSON.stringify(searchSql)}`);
         const dbResult = await db_connection.all(searchSql);
         return dbResult;

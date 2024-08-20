@@ -34,28 +34,32 @@ app.get('/Proteinkomplexe', async (req, res) => {
   try{
     db = await sqlite.open({
       filename: './mydb.db',
-      driver: sqlite.Database
+      driver: sqlite3.Database
     })
     const search_arg = req.body.search_arg;
-    const Proteinkomplexe = await Proteinkomplex.search(search_arg, undefined, undefined, db);
-    console.log(Proteinkomplexe);
+    const complexinfo = await Proteinkomplex.search(search_arg, undefined, undefined, db);
+    console.log(complexinfo);
     if (req.accepts("html")) {
-      ejs.renderFile('./Proteinkomplexe.ejs', {Proteinkomplexe}, {}, function(err, str) {
+      ejs.renderFile('./Proteinkomplexe.ejs', {complexinfo}, {}, function(err, str) {
         if (err) {
           throw err;
         }
         res.send(str);
       });
     } else if (req.accepts("json")) {
-      res.json(Proteinkomplexe)
+      res.json(complexinfo)
     }
   } catch (e) {
     console.error(e);
-    res.status(500);
+    res.status(500).send('Internal Server Error');
   } finally {
-    delete db
+    if (db) {
+      await db.close();
+    }
   }
 })
+
+
 
 //Start Server
 app.listen(port, () => {

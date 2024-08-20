@@ -1,5 +1,10 @@
-const fieldTypes = {
+//const fieldTypes = {
 
+//}
+
+function translateSearchTripletToSQL(triplet) {
+    const { field, operator, value } = searchArg;
+    return `${field} ${operator} '${value}'`;
 }
 
 function translateToSQL(searchArg) {

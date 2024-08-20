@@ -34,10 +34,10 @@ app.get('/Proteinkomplexe', async (req, res) => {
   try{
     db = await sqlite.open({
       filename: './mydb.db',
-      driver: sqlite3.Database
+      driver: sqlite.Database
     })
     const search_arg = req.body.search_arg;
-    const Proteinkomplexe = await Proteinkomplex.search(search_arg, db);
+    const Proteinkomplexe = await Proteinkomplex.search(search_arg, undefined, undefined, db);
     console.log(Proteinkomplexe);
     if (req.accepts("html")) {
       ejs.renderFile('./Proteinkomplexe.ejs', {Proteinkomplexe}, {}, function(err, str) {

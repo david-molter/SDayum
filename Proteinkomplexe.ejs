@@ -9,14 +9,14 @@
                 </tr>
                 <% for (const Proteinkomplex of Proteinkomplexe) { %>
                 <tr>
-                    <td><%= CORUM.complexid %></td>
-                    <td><%= CORUM.name %></td>
-                    <td><%= CORUM.Synonym %></td>
-                    <td><%= CORUM.Organismus %></td>
-                    <td><%= CORUM.Zelllinie %></td>
-                    <td><%= CORUM.Untereinheit ID %></td>
-                    <td><%= CORUM.Funktion ID %></td>
-                    <td><%= CORUM.Publiktation Id %></td>
+                    <td><%= Proteinkomplex.complexid %></td>
+                    <td><%= Proteinkomplex.name %></td>
+                    <td><%= Proteinkomplex.Synonym %></td>
+                    <td><%= Proteinkomplex.Organismus %></td>
+                    <td><%= Proteinkomplex.Zelllinie %></td>
+                    <td><%= Proteinkomplex['Untereinheit ID'] %></td>
+                    <td><%= Proteinkomplex['Funktion ID'] %></td>
+                    <td><%= Proteinkomplex['Publikation ID'] %></td>
                 </tr>
             <% } %>
             </table>

@@ -45,4 +45,29 @@ class Proteinkomplex{
         return new Proteinkomplex(db_res);
     }
 
+    //Auslesen eines Proteinkomplex Eintrags
+    static async search(search_arg, order_arg, pagination_arg, db_connection) {
+        const searchSql = (search_arg !== undefined && search_arg !== null) ? search_arg.translateToSQL(search_arg) : "SELECT complexid, name, synonym, organismus, cell_line, sub_id, fun_id, pub_id FROM Proteinkomplexe";
+        console.log(`SQL genereated to search Proteinkomplexe records:\n${JSON.stringify(searchSQL)}`);
+        const dbResult = await db_connection.all(searchSql);
+        return dbResult;
+    }
+
+    //Update Proteinkomplexe Record
+    async update(keyValuePairs, db_connection) {
+        let sql = "UPDATE Proteinkomplexe SET";
+        for (const[key, value] of Object.entries(keyValuePairs)) {
+            sql += `${key} = ${value}`;
+        }
+        sql += "WHERE complexid = ?";
+        console.log(sql);
+        const db_res = await db_connection.run(sql, this.complexidid);
+        const updated_proteinkomplex = await db_connection.get(
+            'SELECT * FROM Proteinkomplexe WHERE complexid = ?',
+            this.complexid
+        );
+        return updated_proteinkomplex;
+    }
 }
+
+module.exports = Proteinkomplexe;

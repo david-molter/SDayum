@@ -38,7 +38,7 @@ class Proteinkomplex{
     }
 
     //Lesen eines Eintrags aus der Database
-    static.async readById(id, db_connection) {
+    static async readById(id, db_connection) {
         const sql = "SELECT complexid, name, synonym, organismus, cell_line, sub_id, fun_id, pub_id FROM Proteinkomplexe WHERE complexid = ?";
         const db_res = await db_connection.get(sql, id);
         console.log(db_res);

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>Proteinkomplexe</h1>
+        <p>
+            <table id="complexinfo">
+                <tr>
+                    <th>Complex ID</th><th>Name</th><th>Synonym</th><th>Organismus</th><th>Zelllinie</th><th>Untereinheit ID</th><th>Funktion ID</th><th>Publiktation ID</th>
+                </tr>
+                <% for (const Proteinkomplex of Proteinkomplexe) { %>
+                <tr>
+                    <td><%= CORUM.complexid %></td>
+                    <td><%= CORUM.name %></td>
+                    <td><%= CORUM.Synonym %></td>
+                    <td><%= CORUM.Organismus %></td>
+                    <td><%= CORUM.Zelllinie %></td>
+                    <td><%= CORUM.Untereinheit ID %></td>
+                    <td><%= CORUM.Funktion ID %></td>
+                    <td><%= CORUM.Publiktation Id %></td>
+                </tr>
+            <% } %>
+            </table>
+        </p>
+    </body>
+</html>

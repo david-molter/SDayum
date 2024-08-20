@@ -70,4 +70,4 @@ class Proteinkomplex{
     }
 }
 
-module.exports = Proteinkomplexe;
+module.exports = Proteinkomplex;

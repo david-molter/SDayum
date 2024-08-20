@@ -22,3 +22,13 @@ const Proteinkomplexe = require('./CORUM.js')
 const port = 1337
 
 //Mappen der Funktionen
+
+//Routen
+app.get('/Welcome', function(req, res) {
+  res.send('Welcome to CORUM?')
+})
+
+//Start Server
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})

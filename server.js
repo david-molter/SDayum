@@ -15,5 +15,10 @@ const sqlite3 = require('sqlite3')
 //Rendern von HTML-Vorlagen
 const ejs = require('ejs')
 
-//
+//Eigene Module
+const Proteinkomplexe = require('./CORUM.js')
+
+//Definition des Ports
 const port = 1337
+
+//Mappen der Funktionen

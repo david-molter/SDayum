@@ -1,3 +1,5 @@
+const searchArg = require('./searchArg.js')
+
 class Proteinkomplex{
 
     //Definition des Eintrags und dessen Attribute

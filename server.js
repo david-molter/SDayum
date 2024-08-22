@@ -1,5 +1,5 @@
 //Implementieren des Express-Frameworks für den Server
-const express = require('express')
+const express = require('express');
 
 //Konfiguration eines Express-Servers (app) um JSON- und URL-codierte Daten zu parsen
 const app = express()
@@ -12,6 +12,9 @@ app.use(express.urlencoded({
 const sqlite = require('sqlite')
 const sqlite3 = require('sqlite3')
 
+//Sicherstellung, dass Server Zugriff auf statische Dateien
+app.use(express.static('./'))
+
 //Rendern von HTML-Vorlagen
 const ejs = require('ejs')
 const css = require('css')
@@ -21,8 +24,6 @@ const Proteinkomplex = require('./CORUM.js')
 
 //Definition des Ports
 const port = 1337
-
-//Mappen der Funktionen
 
 //Routen zum Testen
 app.get('/Welcome', function(req, res) {

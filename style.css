@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: beige;
+    background-color: lightgreen;
     margin: 0;
     padding: 0;
 }
@@ -20,6 +20,7 @@ table {
     margin: 20px auto;
     border-collapse: collapse;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: white;
 }
 
 th, td {
@@ -34,11 +35,15 @@ th {
 }
 
 tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: lightgray;
 }
 
 tr:hover {
-    background-color: #f1f1f1;
+    background-color: gray;
+}
+
+tr:hover td{
+    color: white;
 }
 
 td {

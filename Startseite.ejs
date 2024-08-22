@@ -2,8 +2,35 @@
 <html>
     <head>
         <link rel="stylesheet" href="style.css">
+        <style>
+            .box {
+                background-color: white;
+                border: 1px solid black;
+                padding: 20px;
+                width: fit-content;
+                margin: 0 auto;
+                text-align: center;
+                width: 80%;
+            }
+            .container {
+                text-align: center;
+            }
+            input[type="text"] {
+                padding: 10px;
+                width: 300px;
+                margin: 10px 0;
+            }
+        </style>
     </head>
     <body>
-        <h1>Willkommen Data-Warehouse zum CORUM Datensatz</h1>
+        <div class="box">
+            <h1>Data-Warehouse zum CORUM Datensatz</h1>
+        </div>
+        <p>Das hier zur Verfügung gestellte Data-Warehouse zum Datensatz von CORUM (The comprehensive resource of mammalian protein 
+            complexes) soll als Plattform dienen. Auf dieser Plattform können Sie nach verschiedenen Proteinkomplexen suchen, bestehende
+            Einträge aktualisieren und neue Einträge verfassen um den Datensatz zu erweitern.</p>
+        <div class="container">
+            <input type="text" placeholder="Suche nach Proteinkomplexen...">
+        </div>
     </body>
 </html>

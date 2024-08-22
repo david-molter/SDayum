@@ -1,8 +1,9 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: lightgreen;
+    background-color: lightseagreen;
     margin: 0;
     padding: 0;
+    padding-top: 33px;
 }
 
 h1 {
@@ -13,6 +14,10 @@ h1 {
 
 p {
     text-align: center;
+    margin: 0 auto;
+    max-width: 80%;
+    text-align: justify;
+    padding-top: 10px;
 }
 
 table {

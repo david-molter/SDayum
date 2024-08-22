@@ -25,10 +25,20 @@ const Proteinkomplex = require('./CORUM.js')
 //Definition des Ports
 const port = 1337
 
-//Routen zum Testen
-app.get('/Welcome', function(req, res) {
-  res.send('Welcome to CORUM?')
-})
+//Start-Route RESTful-Server
+app.get('/', function(req, res) {
+  if (req.accepts("html")) {
+    ejs.renderFile('./Startseite.ejs', function(err, str) {
+      if (err) {
+        res.status(500).send(err.message);
+      } else {
+        res.send(str);
+      }
+    });
+  } else {
+    res.status(406).send('Not Acceptable');
+  }
+});
 
 //Restful-Server Route um Proteinkomplexe zu durchsuchen
 app.get('/Proteinkomplexe', async (req, res) => {

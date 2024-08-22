@@ -14,6 +14,7 @@ const sqlite3 = require('sqlite3')
 
 //Rendern von HTML-Vorlagen
 const ejs = require('ejs')
+const css = require('css')
 
 //Eigene Module
 const Proteinkomplex = require('./CORUM.js')
@@ -59,7 +60,49 @@ app.get('/Proteinkomplexe', async (req, res) => {
   }
 })
 
+//Restful-Server Route um neuen Eintrag zu erstellen
+app.post('/Proteinkomplexe', async function(req, res) {
+  var db;
+  try {
+    db = await sqlite.open({
+      filename: './mydb.db',
+      driver: sqlite3.Database
+    })
+    const new_Proteinkomplex = await Proteinkomplex.createOne(req.body, db);
+    console.log(`Create a new Proteinkomplex record:\n${new_Proteinkomplex}`);
+    res.json(new_Proteinkomplex);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("Internal server error");
+  } finally {
+    if (db) {
+      await db.close;
+    }
+  }
+});
 
+//RESTful-Server Route um einen Proteinkomplex zu updaten
+app.put('/Proteinkomplexe/:complexid', async function(req, res) {
+  var db;
+  try {
+    db = await sqliteopen({
+      filename: './mydb.db',
+      driver: sqlite3.Database
+    })
+    const updateKeyValuePairs = req.body;
+    let Proteinkomplex = await Proteinkomplex.readByID(req.params.complexid, db);
+    let result = await Proteinkomplex.update(updateKeyValuePairs, db);
+    console.log(`Updated a Proteinkomplex record:\n${result}`);
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(300).send("Internal server error");
+  } finally {
+    if (db) {
+      await db.close;
+    }
+  }
+});
 
 //Start Server
 app.listen(port, () => {

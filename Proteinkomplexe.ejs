@@ -2,13 +2,34 @@
 <html>
     <head>
         <link rel="stylesheet" href="style.css">
+        <style>
+            .box {
+                background-color: white;
+                border: 1px solid black;
+                padding: 20px;
+                width: fit-content;
+                margin: 0 auto;
+                text-align: center;
+                width: 80%;
+            }
+            .container {
+                text-align: center;
+            }
+            input[type="text"] {
+                padding: 10px;
+                width: 300px;
+                margin: 10px 0;
+            }
+        </style>
     </head>
     <body>
+        <div class="box">
         <h1>Proteinkomplexe</h1>
+        </div>
         <p>
             <table id="complexinfo">
                 <tr>
-                    <th>Complex ID</th><th>Name</th><th>Synonym</th><th>Organismus</th><th>Zelllinie</th><th>Untereinheit ID</th><th>Funktion ID</th><th>Publikation ID</th>
+                    <th>ID</th><th>Name</th><th>Synonym</th><th>Organismus</th><th>Zelllinie</th><th>Untereinheit ID</th><th>Funktion ID</th><th>Publikation ID</th>
                 </tr>
                 <% for (const Proteinkomplex of complexinfo) { %>
                 <tr>

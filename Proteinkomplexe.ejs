@@ -70,45 +70,49 @@
             </div>
         </p>
         <script>
-            const complexinfo = <%- JSON.stringify(complexinfo) %>;
-            const rowsPerPage = 5;
             let currentPage = 1;
-
-            function displayTable() {
+            const rowsPerPage = 5;
+        
+            function displayTablePage(page) {
                 const tableBody = document.getElementById('table-body');
-                tableBody.innerHTML = '';
-                const start = (currentPage - 1) * rowsPerPage;
-                const end = start + rowsPerPage;
-                const paginatedItems = complexinfo.slice(start, end);
-
-                paginatedItems.forEach(item => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${item.complexid}</td>
-                        <td>${item.name}</td>
-                        <td>${item.synonym}</td>
-                        <td>${item.organismus}</td>
-                        <td>${item.cell_line}</td>
-                    `;
-                    tableBody.appendChild(row);
-                });
+                const rows = tableBody.getElementsByTagName('tr');
+                const totalRows = rows.length;
+                const totalPages = Math.ceil(totalRows / rowsPerPage);
+        
+                if (page < 1) page = 1;
+                if (page > totalPages) page = totalPages;
+        
+                for (let i = 0; i < totalRows; i++) {
+                    rows[i].style.display = 'none';
+                }
+        
+                for (let i = (page - 1) * rowsPerPage; i < (page * rowsPerPage) && i < totalRows; i++) {
+                    rows[i].style.display = '';
+                }
+        
+                currentPage = page;
             }
-
+        
             function prevPage() {
                 if (currentPage > 1) {
-                    currentPage--;
-                    displayTable();
+                    displayTablePage(currentPage - 1);
                 }
             }
-
+        
             function nextPage() {
-                if (currentPage * rowsPerPage < complexinfo.length) {
-                    currentPage++;
-                    displayTable();
+                const tableBody = document.getElementById('table-body');
+                const rows = tableBody.getElementsByTagName('tr');
+                const totalRows = rows.length;
+                const totalPages = Math.ceil(totalRows / rowsPerPage);
+        
+                if (currentPage < totalPages) {
+                    displayTablePage(currentPage + 1);
                 }
             }
-
-            window.onload = displayTable;
+        
+            window.onload = function() {
+                displayTablePage(currentPage);
+            };
         </script>
     </body>
 </html>

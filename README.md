@@ -12,6 +12,7 @@ Zunächst muss sichergestellt sein, dass node.js verfügbar ist und die entsprec
 npm install sqlite --save
 npm install sqlite3 --save
 npm install express --save
+npm install css --save
 ```
 Nachdem alle Dateien heruntergeladen und lokal gespeichert wurde, kann der Server wie folgt im Terminal gestartet werden:
 

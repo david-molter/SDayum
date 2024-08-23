@@ -2,42 +2,6 @@
 <html>
     <head>
         <link rel="stylesheet" href="style.css">
-        <style>
-            .box {
-                background-color: white;
-                border: 1px solid black;
-                padding: 20px;
-                width: fit-content;
-                margin: 0 auto;
-                text-align: center;
-                width: 80%;
-            }
-            .container {
-                text-align: center;
-            }
-            input[type="text"] {
-                padding: 10px;
-                width: 300px;
-                margin: 10px 0;
-            }
-            input[type="text"] {
-                padding: 10px;
-                width: 300px;
-                margin: 10px 0;
-            }
-            .pagination {
-                display: flex;
-                justify-content: center;
-                margin-top: 20px;
-            }
-            .pagination button {
-                padding: 10px;
-                margin: 0 5px;
-                border: 1px solid black;
-                background-color: white;
-                cursor: pointer;
-            }
-        </style>
     </head>
     <body>
         <div class="box">
@@ -63,15 +27,15 @@
                         <% }); %>   
                     </tbody>
                 </table>
-                <div class="pagination">
-                    <button onclick="prevPage()">Previous</button>
-                    <button onclick="nextPage()">Next</button>
+                <div class="pagination button">
+                    <button onclick="prevPage()">Vorherige Seite</button>
+                    <button onclick="nextPage()">Nächste Seite</button>
                 </div>
             </div>
         </p>
         <script>
             let currentPage = 1;
-            const rowsPerPage = 5;
+            const rowsPerPage = 10;
         
             function displayTablePage(page) {
                 const tableBody = document.getElementById('table-body');

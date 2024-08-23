@@ -20,6 +20,23 @@
                 width: 300px;
                 margin: 10px 0;
             }
+            input[type="text"] {
+                padding: 10px;
+                width: 300px;
+                margin: 10px 0;
+            }
+            .pagination {
+                display: flex;
+                justify-content: center;
+                margin-top: 20px;
+            }
+            .pagination button {
+                padding: 10px;
+                margin: 0 5px;
+                border: 1px solid black;
+                background-color: white;
+                cursor: pointer;
+            }
         </style>
     </head>
     <body>
@@ -27,23 +44,71 @@
         <h1>Proteinkomplexe</h1>
         </div>
         <p>
-            <table id="complexinfo">
-                <tr>
-                    <th>ID</th><th>Name</th><th>Synonym</th><th>Organismus</th><th>Zelllinie</th><th>Untereinheit ID</th><th>Funktion ID</th><th>Publikation ID</th>
-                </tr>
-                <% for (const Proteinkomplex of complexinfo) { %>
-                <tr>
-                    <td><%= Proteinkomplex.complexid %></td>
-                    <td><%= Proteinkomplex.name %></td>
-                    <td><%= Proteinkomplex.synonym %></td>
-                    <td><%= Proteinkomplex.organismus %></td>
-                    <td><%= Proteinkomplex.cell_line %></td>
-                    <td><%= Proteinkomplex.sub_id %></td>
-                    <td><%= Proteinkomplex.fun_id %></td>
-                    <td><%= Proteinkomplex.pub_id %></td>
-                </tr>
-            <% } %>
-            </table>
+            <div class="container">
+                <table id="complexinfo">
+                    <thead>
+                        <tr>
+                            <th>ID</th><th>Name</th><th>Synonym</th><th>Organismus</th><th>Zelllinie</th>
+                        </tr>    
+                    </thead>
+                    <tbody id="table-body">
+                        <% complexinfo.forEach(function(item) { %>
+                            <tr>
+                                <td><%= item.complexid %></td>
+                                <td><%= item.name %></td>
+                                <td><%= item.synonym %></td>
+                                <td><%= item.organismus %></td>
+                                <td><%= item.cell_line %></td>
+                            </tr>
+                        <% }); %>   
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <button onclick="prevPage()">Previous</button>
+                    <button onclick="nextPage()">Next</button>
+                </div>
+            </div>
         </p>
+        <script>
+            const complexinfo = <%- JSON.stringify(complexinfo) %>;
+            const rowsPerPage = 5;
+            let currentPage = 1;
+
+            function displayTable() {
+                const tableBody = document.getElementById('table-body');
+                tableBody.innerHTML = '';
+                const start = (currentPage - 1) * rowsPerPage;
+                const end = start + rowsPerPage;
+                const paginatedItems = complexinfo.slice(start, end);
+
+                paginatedItems.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.complexid}</td>
+                        <td>${item.name}</td>
+                        <td>${item.synonym}</td>
+                        <td>${item.organismus}</td>
+                        <td>${item.cell_line}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+
+            function prevPage() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    displayTable();
+                }
+            }
+
+            function nextPage() {
+                if (currentPage * rowsPerPage < complexinfo.length) {
+                    currentPage++;
+                    displayTable();
+                }
+            }
+
+            window.onload = displayTable;
+        </script>
     </body>
 </html>

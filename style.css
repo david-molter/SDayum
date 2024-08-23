@@ -54,3 +54,12 @@ tr:hover td{
 td {
     color: #666;
 }
+
+.pagination {
+    margin-top: 10px;
+}
+
+.pagination button {
+    padding: 5px 10px;
+    margin: 0 2px;
+}

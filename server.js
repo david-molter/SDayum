@@ -7,6 +7,8 @@ app.use(express.json())
 app.use(express.urlencoded({
   extended: true
 }))
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
 
 //Verbindung zu SQLite-Datenbanken
 const sqlite = require('sqlite')
@@ -21,9 +23,17 @@ const css = require('css')
 
 //Eigene Module
 const Proteinkomplex = require('./CORUM.js')
+const { translateToSQL } = require('./searchArg.js');
 
 //Definition des Ports
 const port = 1337
+
+//Search-Route
+app.post('/Proteinkomplexe', (req, res) => {
+  const searchArg = req.body.query;
+  const sqlQuery = translateToSQL(searchArg);
+  res.json({ message: 'SQL Query', query: sqlQuery });
+});
 
 //Start-Route RESTful-Server
 app.get('/', function(req, res) {

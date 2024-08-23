@@ -1,7 +1,3 @@
-//const fieldTypes = {
-
-//}
-
 function translateSearchTripletToSQL(triplet) {
     const { field, operator, value } = searchArg;
     return `${field} ${operator} '${value}'`;
@@ -24,4 +20,4 @@ function translateToSqlRecursive(searchArg) {
     }
 }
 
-module.exports = {translateToSQL}
+module.exports = {translateToSQL};

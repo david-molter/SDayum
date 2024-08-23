@@ -8,6 +8,11 @@
         <h1>Proteinkomplexe</h1>
         </div>
         <p>
+            <form id="searchForm">
+                <input type="text" id="searchInput" placeholder="Suchbegriff eingeben...">
+                <button type="submit">Suchen</button>
+            </form>
+            <div id="results"></div>
             <div class="container">
                 <table id="complexinfo">
                     <thead>
@@ -77,6 +82,21 @@
             window.onload = function() {
                 displayTablePage(currentPage);
             };
+        </script>
+        <script>
+            document.getElementById('searchForm').addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const query = document.getElementById('searchInput').value;
+                const response = await fetch('/Proteinkomplexe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ query })
+                });
+                const results = await response.json();
+                document.getElementById('results').innerHTML = JSON.stringify(results, null, 2);
+            });
         </script>
     </body>
 </html>

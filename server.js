@@ -23,7 +23,8 @@ const css = require('css')
 
 //Eigene Module
 const Proteinkomplex = require('./CORUM.js')
-const searchArg = require('./searchArg.js');
+const searchArg = require('./searchArg.js')
+//const {translateToSQL} = require('./translateToSQL')
 
 //Definition des Ports
 const port = 1337

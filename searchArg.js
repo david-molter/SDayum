@@ -1,13 +1,13 @@
-function testTranslateToSQL() {
+function translateToSQL() {
     var example_search_arg_1 = {
         descendants: [{
             field: "name",
             op: "like",
-            val: "B%"
+            val: "%CoREST%"
         },
         {
             field: "organismus",
-            op: "==",
+            op: "=",
             val: "Human"
         }
     ],
@@ -21,7 +21,7 @@ function testTranslateToSQL() {
             descendants: [{
                 field: "name",
                 op: "like",
-                val: "B%"
+                val: "%CoREST%"
             },
             {
                 field: "organismus",
@@ -31,14 +31,14 @@ function testTranslateToSQL() {
         ]
     },
     {
-        field: "is_Human",
-        op: "==",
+        field: "organismus",
+        op: "=",
         val: true
     }
     ]
     };
     const expected_sql_example_1 =
-    'SELECT * FROM Proteinkomplexe WHERE ( (name like B%) AND (organismus == Human) )';
+    'SELECT * FROM Proteinkomplexe WHERE ( (name like %CoREST%) AND (organismus = Human) )';
     const test_1 = translateToSQL(example_search_arg_1) === expected_sql_example_1;
 
     return test_1;
@@ -54,16 +54,16 @@ function translateSearchTripletToSQL(triplet) {
     return `${field} ${operator} '${value}'`;
 }
  
-function translateToSQL(searchArg) {
-    const header = "SELECT * FROM Proteinkomplexe WHERE ";
-    var searchSql = translateToSqlRecursive(searchArg);
+function testTranslateToSQL(searchArg) {
+    const header = "SELECT * FROM complexinfo WHERE ";
+    var searchSql = translateToSQLRecursive(searchArg);
     return `${header} ${searchSql}`;
 }
- 
+
 function translateToSQLRecursive(searchArg) {
     var hasDescendants = searchArg.descendants !== undefined;
     if (hasDescendants) {
-        var descSqlArr = searchArg.descendants.map(translateToSqlRecursive);
+        var descSqlArr = searchArg.descendants.map(translateToSQLRecursive);
         var sql = descSqlArr.reduce((a, c) => `${a} ${searchArg.op} ${c}`);
         return `(${sql})`;
     } else {

@@ -2,13 +2,13 @@ function translateSearchTripletToSQL(triplet) {
     const { field, operator, value } = searchArg;
     return `${field} ${operator} '${value}'`;
 }
-
+ 
 function translateToSQL(searchArg) {
     const header = "SELECT * FROM Proteinkomplexe WHERE ";
     var searchSql = translateToSqlRecursive(searchArg);
     return `${header} ${searchSql}`;
 }
-
+ 
 function translateToSqlRecursive(searchArg) {
     var hasDescendants = searchArg.descendants !== undefined;
     if (hasDescendants) {
@@ -19,5 +19,5 @@ function translateToSqlRecursive(searchArg) {
         return translateSearchTripletToSQL(searchArg);
     }
 }
-
+ 
 module.exports = {translateToSQL};

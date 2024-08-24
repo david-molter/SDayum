@@ -75,3 +75,8 @@ td {
     text-align: center;
     width: 80%;
 }
+
+.searchForm {
+    display: flex;
+    justify-content: center;
+}

@@ -9,7 +9,7 @@ function translateToSQL(searchArg) {
     return `${header} ${searchSql}`;
 }
  
-function translateToSqlRecursive(searchArg) {
+function translateToSQLRecursive(searchArg) {
     var hasDescendants = searchArg.descendants !== undefined;
     if (hasDescendants) {
         var descSqlArr = searchArg.descendants.map(translateToSqlRecursive);

@@ -8,12 +8,14 @@
         <h1>Proteinkomplexe</h1>
     </div>
     <p>
-        <form id="searchForm" action="/search" method="get">
-            <input type="text" id="searchInput" name="q" placeholder="Suchbegriff eingeben..." value="<%= query %>">
-            <button type="submit">Suchen</button>
-        </form>
         <div id="results"></div>
         <div class="container">
+            <div class="searchbar">
+                <form id="searchForm" action="/search" method="get">
+                    <input type="text" id="searchInput" name="q" placeholder="Suchbegriff eingeben..." value="<%= query %>">
+                    <button type="submit">Suchen</button>
+                </form>
+            </div>
             <table id="complexinfo">
                 <thead>
                     <tr>

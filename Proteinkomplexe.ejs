@@ -1,27 +1,32 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <div class="box">
+<head>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="box">
         <h1>Proteinkomplexe</h1>
-        </div>
-        <p>
-            <form id="searchForm">
-                <input type="text" id="searchInput" placeholder="Suchbegriff eingeben...">
-                <button type="submit">Suchen</button>
-            </form>
-            <div id="results"></div>
-            <div class="container">
-                <table id="complexinfo">
-                    <thead>
-                        <tr>
-                            <th>ID</th><th>Name</th><th>Synonym</th><th>Organismus</th><th>Zelllinie</th>
-                        </tr>    
-                    </thead>
-                    <tbody id="table-body">
-                        <% complexinfo.forEach(function(item) { %>
+    </div>
+    <p>
+        <form id="searchForm" action="/search" method="get">
+            <input type="text" id="searchInput" name="q" placeholder="Suchbegriff eingeben..." value="<%= query %>">
+            <button type="submit">Suchen</button>
+        </form>
+        <div id="results"></div>
+        <div class="container">
+            <table id="complexinfo">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Synonym</th>
+                        <th>Organismus</th>
+                        <th>Zelllinie</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <% if (results.length > 0) { %>
+                        <% results.forEach(function(item) { %>
                             <tr>
                                 <td><%= item.complexid %></td>
                                 <td><%= item.name %></td>
@@ -29,75 +34,26 @@
                                 <td><%= item.organismus %></td>
                                 <td><%= item.cell_line %></td>
                             </tr>
-                        <% }); %>   
-                    </tbody>
-                </table>
-                <div class="pagination button">
-                    <button onclick="prevPage()">Vorherige Seite</button>
-                    <button onclick="nextPage()">Nächste Seite</button>
-                </div>
+                        <% }); %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="5">No results found.</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+            <div id="pagination" class="pagination button">
+                <% if (totalPages > 1) { %>
+                    <% if (page > 1) { %>
+                        <a href="/search?q=<%= query %>&page=<%= page - 1 %>">&laquo; Previous</a>
+                    <% } %>
+                    <span> Page <%= page %> of <%= totalPages %> </span>
+                    <% if (page < totalPages) { %>
+                        <a href="/search?q=<%= query %>&page=<%= page + 1 %>">Next &raquo;</a>
+                    <% } %>
+                <% } %>
             </div>
-        </p>
-        <script>
-            let currentPage = 1;
-            const rowsPerPage = 10;
-        
-            function displayTablePage(page) {
-                const tableBody = document.getElementById('table-body');
-                const rows = tableBody.getElementsByTagName('tr');
-                const totalRows = rows.length;
-                const totalPages = Math.ceil(totalRows / rowsPerPage);
-        
-                if (page < 1) page = 1;
-                if (page > totalPages) page = totalPages;
-        
-                for (let i = 0; i < totalRows; i++) {
-                    rows[i].style.display = 'none';
-                }
-        
-                for (let i = (page - 1) * rowsPerPage; i < (page * rowsPerPage) && i < totalRows; i++) {
-                    rows[i].style.display = '';
-                }
-        
-                currentPage = page;
-            }
-        
-            function prevPage() {
-                if (currentPage > 1) {
-                    displayTablePage(currentPage - 1);
-                }
-            }
-        
-            function nextPage() {
-                const tableBody = document.getElementById('table-body');
-                const rows = tableBody.getElementsByTagName('tr');
-                const totalRows = rows.length;
-                const totalPages = Math.ceil(totalRows / rowsPerPage);
-        
-                if (currentPage < totalPages) {
-                    displayTablePage(currentPage + 1);
-                }
-            }
-        
-            window.onload = function() {
-                displayTablePage(currentPage);
-            };
-        </script>
-        <script>
-            document.getElementById('searchForm').addEventListener('submit', async function(event) {
-                event.preventDefault();
-                const query = document.getElementById('searchInput').value;
-                const response = await fetch('/Proteinkomplexe', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ query })
-                });
-                const results = await response.json();
-                document.getElementById('results').innerHTML = JSON.stringify(results, null, 2);
-            });
-        </script>
-        <script src="searchArg.js"></script>
-    </body>
+        </div>
+    </p>
+</body>
 </html>

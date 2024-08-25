@@ -1,132 +1,60 @@
-//Implementieren des Express-Frameworks für den Server
+// server.js
 const express = require('express');
+const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
+const app = express();
+const port = 1337;
+const ejs = require('./node_modules/ejs')
 
-//Konfiguration eines Express-Servers (app) um JSON- und URL-codierte Daten zu parsen
-const app = express()
-app.use(express.json())
-app.use(express.urlencoded({
-  extended: true
-}))
-const bodyParser = require('body-parser');
-app.use(bodyParser.json());
+// Set the view engine to EJS
+app.engine('ejs',ejs.renderFile);
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, './'));
 
-//Verbindung zu SQLite-Datenbanken
-const sqlite = require('sqlite')
-const sqlite3 = require('sqlite3')
+// Serve static files like CSS
+app.use(express.static(path.join(__dirname, './')));
 
-//Sicherstellung, dass Server Zugriff auf statische Dateien
-app.use(express.static('./'))
+// Connect to SQLite database
+const db = new sqlite3.Database('./mydb.db');
 
-//Rendern von HTML-Vorlagen
-const ejs = require('ejs')
-const css = require('css')
-
-//Eigene Module
-const Proteinkomplex = require('./CORUM.js')
-const searchArg = require('./searchArg.js')
-//const {translateToSQL} = require('./translateToSQL')
-
-//Definition des Ports
-const port = 1337
-
-//Search-Route
-app.post('/Proteinkomplexe', (req, res) => {
-  const searchArg = req.body.query;
-  const sqlQuery = translateToSQL(searchArg);
-  res.json({ message: 'SQL Query', query: sqlQuery });
+// Home route to render the search page
+app.get('/', (req, res) => {
+    res.render('Proteinkomplexe', { results: [], query: '', page: 1, totalPages: 1 });
 });
 
-//Start-Route RESTful-Server
-app.get('/', function(req, res) {
-  if (req.accepts("html")) {
-    ejs.renderFile('./Startseite.ejs', function(err, str) {
-      if (err) {
-        res.status(500).send(err.message);
-      } else {
-        res.send(str);
-      }
-    });
-  } else {
-    res.status(406).send('Not Acceptable');
-  }
-});
+// Search API with pagination
+app.get('/search', (req, res) => {
+    const query = req.query.q ? `%${req.query.q}%` : '%';
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
 
-//Restful-Server Route um Proteinkomplexe zu durchsuchen
-app.get('/Proteinkomplexe', async (req, res) => {
-  var db;
-  try{
-    db = await sqlite.open({
-      filename: './mydb.db',
-      driver: sqlite3.Database
-    })
-    const search_arg = req.body.search_arg;
-    const complexinfo = await Proteinkomplex.search(search_arg, undefined, undefined, db);
-    console.log(complexinfo);
-    if (req.accepts("html")) {
-      ejs.renderFile('./Proteinkomplexe.ejs', {complexinfo}, {}, function(err, str) {
+    const sql = `SELECT * FROM complexinfo WHERE name LIKE ? LIMIT ? OFFSET ?`;
+    const countSql = `SELECT COUNT(*) as total FROM complexinfo WHERE name LIKE ?`;
+
+    db.all(sql, [query, limit, offset], (err, results) => {
         if (err) {
-          throw err;
+            return res.status(500).json({ error: err.message });
         }
-        res.send(str);
-      });
-    } else if (req.accepts("json")) {
-      res.json(complexinfo)
-    }
-  } catch (e) {
-    console.error(e);
-    res.status(500).send('Internal Server Error');
-  } finally {
-    if (db) {
-      await db.close();
-    }
-  }
-})
 
-//Restful-Server Route um neuen Eintrag zu erstellen
-app.post('/Proteinkomplexe', async function(req, res) {
-  var db;
-  try {
-    db = await sqlite.open({
-      filename: './mydb.db',
-      driver: sqlite3.Database
-    })
-    const new_Proteinkomplex = await Proteinkomplex.createOne(req.body, db);
-    console.log(`Create a new Proteinkomplex record:\n${new_Proteinkomplex}`);
-    res.json(new_Proteinkomplex);
-  } catch (err) {
-    console.log(err);
-    res.status(400).send("Internal server error");
-  } finally {
-    if (db) {
-      await db.close;
-    }
-  }
+        db.get(countSql, [query], (err, countResult) => {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+
+            const totalRows = countResult.total;
+            const totalPages = Math.ceil(totalRows / limit);
+
+            res.render('Proteinkomplexe', {
+                results,
+                query: req.query.q || '',
+                page,
+                totalPages
+            });
+        });
+    });
 });
 
-//RESTful-Server Route um einen Proteinkomplex zu updaten
-app.put('/Proteinkomplexe/:complexid', async function(req, res) {
-  var db;
-  try {
-    db = await sqliteopen({
-      filename: './mydb.db',
-      driver: sqlite3.Database
-    })
-    const updateKeyValuePairs = req.body;
-    let Proteinkomplex = await Proteinkomplex.readByID(req.params.complexid, db);
-    let result = await Proteinkomplex.update(updateKeyValuePairs, db);
-    console.log(`Updated a Proteinkomplex record:\n${result}`);
-    res.json(result);
-  } catch (err) {
-    console.error(err);
-    res.status(300).send("Internal server error");
-  } finally {
-    if (db) {
-      await db.close;
-    }
-  }
-});
-
-//Start Server
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+    console.log(`Server running at http://localhost:${port}`);
+});

@@ -7,6 +7,14 @@
     <div class="box">
         <h1>Details für Proteinkomplex: <%= details.name %></h1>
     </div>
-    <p>Organismus: <%= details.organismus %></p>
+    <p>
+        <div class="box">
+            <h3>Allgemeine Informationen</h3>
+            <p>ID: <%= details.complexid %></p>
+            <p>Synonyme: <%= details.synonym %></p>
+            <p>Organismus: <%= details.organismus %></p>
+            <p>Zelllinie/Gewebe: <%= details.cell_line %></p>
+        </div>
+    </p>
 </body>
 </html>

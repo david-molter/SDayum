@@ -16,7 +16,7 @@
     <p>
         <div class="box">
             <h3>Allgemeine Informationen</h3>
-            <table style="border: none; width: 80%; box-shadow: none;">
+            <table style="border: none; width: 100%; box-shadow: none;">
                 <tbody>
                         <tr style="background-color: transparent;">
                             <td style="background-color: white; border: none; color: black; width: 200px;">ID:</td>
@@ -45,7 +45,7 @@
             <span id="gen_synonym" style="display: none;"><%= details.gen_synonym %></span>
             <span id="uniprot_id" style="display: none;"><%= details.uniprot_id %></span>
             <span id="entrez_id" style="display: none;"><%= details.entrez_id %></span>
-                <table id="Untereinheiten" border="1">
+                <table id="Untereinheiten" border="1" style="width: 100%;">
                     <thead>
                         <tr>
                         <th>Name</th>
@@ -63,10 +63,24 @@
         </div>
         <div class="box">
             <h3>Funktionen</h3>
-            <p>FunCat ID: <%= details.funcat_id %></p>
-            <p>FunCat Beschreibung: <%= details.fundescription %></p>
-            <p>GO ID: <%= details.go_id %></p>
-            <p>GO Beschreibung: <%= details.godescription %></p>
+            <span id="go_id" style="display: none;"><%= details.go_id %></span>
+            <span id="godescription" style="display: none;"><%= details.godescription %></span>
+            <span id="funcat_id" style="display: none;"><%= details.funcat_id %></span>
+            <span id="fundescription" style="display: none;"><%= details.fundescription %></span>
+                <table id="Funktionen" border="1" style="width: 100%;">
+                    <thead>
+                        <tr>
+                        <th>GO ID</th>
+                        <th>GO Beschreibung</th>
+                        <!-- <th></th> -->
+                        <th>FunCat ID</th>
+                        <th>FunCat Beschreibung</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Dynamisch generierte Zeilen werden hier eingefügt -->
+                    </tbody>
+                </table>
         </div>
         <div class="box">
             <h3>Referenzen</h3>
@@ -130,12 +144,56 @@
                 row.appendChild(genessynCell);
 
                 const uniprotCell = document.createElement("td");
-                uniprotCell.textContent = uniprot[i].trim(); // Leerzeichen entfernen
+                const uniprotLink = document.createElement("a");
+                uniprotLink.href = `https://www.uniprot.org/uniprotkb/${uniprot[i].trim()}/entry`;
+                uniprotLink.textContent = uniprot[i].trim();
+                uniprotCell.appendChild(uniprotLink);
                 row.appendChild(uniprotCell);
 
                 const entrezCell = document.createElement("td");
-                entrezCell.textContent = entrez[i].trim(); // Leerzeichen entfernen
+                const entrezLink = document.createElement("a");
+                entrezLink.href = `https://www.ncbi.nlm.nih.gov/gene/${entrez[i].trim()}`;
+                entrezLink.textContent = entrez[i].trim();
+                entrezCell.appendChild(entrezLink);
                 row.appendChild(entrezCell);
+
+                tbody.appendChild(row);
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            //<%= details.subname %> <%= details.swissorganismus %> <%= details.gen %>
+            const go_id = document.getElementById("go_id").innerText.split(';');
+            const godescription = document.getElementById("godescription").innerText.split(';');
+            const funcat_id = document.getElementById("funcat_id").innerText.split(';');
+            const fundescription = document.getElementById("fundescription").innerText.split(';');
+
+            // Tabelle und tbody-Elemente abrufen
+            const table = document.getElementById("Funktionen");
+            const tbody = table.querySelector("tbody");
+
+            for (let i = 0; i < go_id.length; i++) {
+                const row = document.createElement("tr");
+
+                const go_idCell = document.createElement("td");
+                const go_idLink = document.createElement("a");
+                go_idLink.href = `https://amigo.geneontology.org/amigo/term/${go_id[i].trim()}`; // Beispiel-Link
+                go_idLink.textContent = go_id[i].trim();
+                go_idCell.appendChild(go_idLink);
+                row.appendChild(go_idCell);
+
+                const godescriptionCell = document.createElement("td");
+                godescriptionCell.textContent = godescription[i].trim(); // Leerzeichen entfernen
+                row.appendChild(godescriptionCell);
+
+                const funcat_idCell = document.createElement("td");
+                funcat_idCell.textContent = funcat_id[i].trim(); // Leerzeichen entfernen
+                row.appendChild(funcat_idCell);
+
+                const fundescriptionCell = document.createElement("td");
+                fundescriptionCell.textContent = fundescription[i].trim(); // Leerzeichen entfernen
+                row.appendChild(fundescriptionCell);
 
                 tbody.appendChild(row);
             }

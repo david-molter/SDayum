@@ -17,8 +17,8 @@ BEGIN;
 
     CREATE TABLE untereinheiten (
         subid INTEGER PRIMARY KEY AUTOINCREMENT,
-        name VARCHAR(250) NOT NULL,
-        organismus VARCHAR(250) NOT NULL,
+        subname VARCHAR(250) NOT NULL,
+        swissorganismus VARCHAR(250) NOT NULL,
         gen VARCHAR(250) NOT NULL,
         gen_synonym VARCHAR(250) NOT NULL,
         uniprot_id VARCHAR(250) NOT NULL,
@@ -104,7 +104,7 @@ INSERT INTO complexinfo (complexid, name, synonym, organismus, cell_line, sub_id
 
 -- NOTE: To Debug: Added  columns subid, funid and pubid to csv_import, and colums sub_id, fun_id, pub_id 
 --       to INSERT INTO complexinfo-statement and applied fix to other Tables
-INSERT INTO untereinheiten (subid, name, organismus, gen, gen_synonym, uniprot_id, entrez_id, complex_id, pub_id) SELECT subid, name_sub, swiss_organismus, gen_sub, gen_sub_synonym, uniprot_id, entrez_id, complex_id, pubid
+INSERT INTO untereinheiten (subid, subname, swissorganismus, gen, gen_synonym, uniprot_id, entrez_id, complex_id, pub_id) SELECT subid, name_sub, swiss_organismus, gen_sub, gen_sub_synonym, uniprot_id, entrez_id, complex_id, pubid
     FROM csv_import WHERE 1;
 INSERT INTO funktion (funid, funcat_id, fundescription, go_id, godescription, complex_id) SELECT funid, funcat_id, funcat_description, go_id, go_description, complex_id
     FROM csv_import WHERE 1;

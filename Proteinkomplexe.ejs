@@ -11,8 +11,8 @@
         <div id="results"></div>
         <div class="container">
             <div class="searchbar">
-                <form id="searchForm" action="/search" method="get">
-                    <input type="text" id="searchInput" name="q" placeholder="Suchbegriff eingeben..." value="<%= query %>">
+                <form id="searchForm" action="/search" method="get" style="display: flex;">
+                    <input type="text" id="searchInput" name="q" placeholder="Suche nach Complex ID/Proteinkomplex/Organismus..." value="<%= query %>" style="width: 300px;">
                     <button type="submit">Suchen</button>
                 </form>
             </div>
@@ -23,7 +23,6 @@
                         <th>Name</th>
                         <th>Synonym</th>
                         <th>Organismus</th>
-                        <th>Zelllinie</th>
                     </tr>
                 </thead>
                 <tbody id="table-body">
@@ -34,7 +33,6 @@
                                 <td><a href="/entries/<%= item.complexid %>"><%= item.name %></a></td>
                                 <td><%= item.synonym %></td>
                                 <td><%= item.organismus %></td>
-                                <td><%= item.cell_line %></td>
                             </tr>
                         <% }); %>
                     <% } else { %>

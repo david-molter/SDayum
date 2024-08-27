@@ -88,7 +88,7 @@ td {
 
 .searchbar {
     transform: translateX(-400px);
-    width: 210px;
+    width: 363px;
     display: flex;
     justify-content: flex-start;
     margin: 20px auto;

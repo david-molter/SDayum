@@ -29,15 +29,15 @@ app.get('/search', (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const offset = (page - 1) * limit;
 
-    const sql = `SELECT * FROM complexinfo WHERE name LIKE ? or complexid LIKE ? LIMIT ? OFFSET ?`;
-    const countSql = `SELECT COUNT(*) as total FROM complexinfo WHERE name LIKE ? or complexid LIKE ?`;
+    const sql = `SELECT * FROM complexinfo WHERE name LIKE ? or complexid LIKE ? or organismus LIKE ? LIMIT ? OFFSET ?`;
+    const countSql = `SELECT COUNT(*) as total FROM complexinfo WHERE name LIKE ? or complexid LIKE ? or organismus LIKE ?`;
 
-    db.all(sql, [query, query, limit, offset], (err, results) => {
+    db.all(sql, [query, query, query, limit, offset], (err, results) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
 
-        db.get(countSql, [query, query], (err, countResult) => {
+        db.get(countSql, [query, query, query], (err, countResult) => {
             if (err) {
                 return res.status(500).json({ error: err.message });
             }

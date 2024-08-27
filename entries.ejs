@@ -17,12 +17,27 @@
         </div>
         <div class="box">
             <h3>Untereinheiten</h3>
-            <p>Name der Untereinheiten: <%= details.subname %></p>
-            <p>SWISSPROT Organismus: <%= details.swissorganismus %></p>
-            <p>Gen: <%= details.gen %></p>
-            <p>gen_syn: <%= details.gen_synonym %></p>
-            <p>UniProt ID: <%= details.uniprot_id %></p>
-            <p>Entrez ID: <%= details.entrez_id %></p>
+            <span id="subname" style="display: none;"><%= details.subname %></span>
+            <span id="swissorganismus" style="display: none;"><%= details.swissorganismus %></span>
+            <span id="gen" style="display: none;"><%= details.gen %></span>
+            <span id="gen_synonym" style="display: none;"><%= details.gen_synonym %></span>
+            <span id="uniprot_id" style="display: none;"><%= details.uniprot_id %></span>
+            <span id="entrez_id" style="display: none;"><%= details.entrez_id %></span>
+                <table id="Untereinheiten" border="1">
+                    <thead>
+                        <tr>
+                        <th>Name</th>
+                        <th>Organismus</th>
+                        <th>Gen</th>
+                        <th>Gen Synonym</th>
+                        <th>UniProt ID</th>
+                        <th>Entrez ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Dynamisch generierte Zeilen werden hier eingefügt -->
+                    </tbody>
+                </table>
         </div>
         <div class="box">
             <h3>Funktionen</h3>
@@ -40,5 +55,50 @@
             <p>PubMed ID:<a href="https://pubmed.ncbi.nlm.nih.gov/<%= details.pubmed_id %>/"><%= details.pubmed_id %></a></p>
         </div>
     </p>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            //<%= details.subname %> <%= details.swissorganismus %> <%= details.gen %>
+            const names = document.getElementById("subname").innerText.split(';');
+            const organism = document.getElementById("swissorganismus").innerText.split(';');
+            const genes = document.getElementById("gen").innerText.split(';');
+            const genessyn = document.getElementById("gen_synonym").innerText.split(';');
+            const uniprot = document.getElementById("uniprot_id").innerText.split(';');
+            const entrez = document.getElementById("entrez_id").innerText.split(';');
+
+            // Tabelle und tbody-Elemente abrufen
+            const table = document.getElementById("Untereinheiten");
+            const tbody = table.querySelector("tbody");
+
+            for (let i = 0; i < names.length; i++) {
+                const row = document.createElement("tr");
+
+                const nameCell = document.createElement("td");
+                nameCell.textContent = names[i].trim(); // Leerzeichen entfernen
+                row.appendChild(nameCell);
+
+                const organismCell = document.createElement("td");
+                organismCell.textContent = organism[i].trim(); // Leerzeichen entfernen
+                row.appendChild(organismCell);
+
+                const genesCell = document.createElement("td");
+                genesCell.textContent = genes[i].trim(); // Leerzeichen entfernen
+                row.appendChild(genesCell);
+
+                const genessynCell = document.createElement("td");
+                genessynCell.textContent = genessyn[i].trim(); // Leerzeichen entfernen
+                row.appendChild(genessynCell);
+
+                const uniprotCell = document.createElement("td");
+                uniprotCell.textContent = uniprot[i].trim(); // Leerzeichen entfernen
+                row.appendChild(uniprotCell);
+
+                const entrezCell = document.createElement("td");
+                entrezCell.textContent = entrez[i].trim(); // Leerzeichen entfernen
+                row.appendChild(entrezCell);
+
+                tbody.appendChild(row);
+            }
+        });
+    </script>
 </body>
 </html>

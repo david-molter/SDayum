@@ -2,6 +2,12 @@
 <html>
 <head>
     <link rel="stylesheet" href="/style.css">
+    <style>
+        pre {
+            font-family: "Arial", sans-serif, monospace;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
     <div class="box">
@@ -10,10 +16,12 @@
     <p>
         <div class="box">
             <h3>Allgemeine Informationen</h3>
-            <p>ID: <%= details.complexid %></p>
-            <p>Synonyme: <%= details.synonym %></p>
-            <p>Organismus: <%= details.organismus %></p>
-            <p>Zelllinie/Gewebe: <%= details.cell_line %></p>
+            <pre>
+                <p>ID:                  <%= details.complexid %></p>
+                <p>Synonyme:            <%= details.synonym %></p>
+                <p>Organismus:          <%= details.organismus %></p>
+                <p>Zelllinie/Gewebe:    <%= details.cell_line %></p>
+            </pre>
         </div>
         <div class="box">
             <h3>Untereinheiten</h3>

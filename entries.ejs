@@ -24,6 +24,21 @@
             <p>UniProt ID: <%= details.uniprot_id %></p>
             <p>Entrez ID: <%= details.entrez_id %></p>
         </div>
+        <div class="box">
+            <h3>Funktionen</h3>
+            <p>FunCat ID: <%= details.funcat_id %></p>
+            <p>FunCat Beschreibung: <%= details.fundescription %></p>
+            <p>GO ID: <%= details.go_id %></p>
+            <p>GO Beschreibung: <%= details.godescription %></p>
+        </div>
+        <div class="box">
+            <h3>Referenzen</h3>
+            <p>Aufreinigung Methode: <%= details.purification %></p>
+            <p>Komplex Kommentar: <%= details.complex_comment %></p>
+            <p>Krankheit Kommentar: <%= details.disease_comment %></p>
+            <p>Untereinheiten Kommentar: <%= details.sub_comment %></p>
+            <p>PubMed ID:<a href="https://pubmed.ncbi.nlm.nih.gov/<%= details.pubmed_id %>/"><%= details.pubmed_id %></a></p>
+        </div>
     </p>
 </body>
 </html>

@@ -60,7 +60,14 @@ app.get('/entries/:id', async (req, res) => {
     const id = req.params.id;
     console.log('Complex ID:', id);
     try {
-        db.get('SELECT * FROM complexinfo WHERE complexid = ?', [id], (err, details) => {
+        db.get(`
+            SELECT complexinfo.*, untereinheiten.*, funktion.*, publikation.*
+            FROM complexinfo
+            JOIN untereinheiten ON complexinfo.sub_id = untereinheiten.subid
+            JOIN funktion ON complexinfo.fun_id = funktion.funid
+            JOIN publikation ON complexinfo.pub_id = publikation.pubid
+            WHERE complexinfo.complexid = ?
+        `, [id], (err, details) => {
             if (err) {
                 console.error('Fehler bei der Datenbankabfrage:', err);
                 res.status(500).send('Serverfehler');

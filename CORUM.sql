@@ -122,8 +122,8 @@ DROP TABLE csv_import;
 COMMIT;
 
 -- DROP TABLE Statements to clear DB during testing, have to be moved to comments in final version
-DROP TABLE complexinfo;
-DROP Table untereinheiten;
-DROP Table funktion;
-DROP TABLE publikation;
-DROP TABLE csv_import;
+-- DROP TABLE complexinfo;
+-- DROP Table untereinheiten;
+-- DROP Table funktion;
+-- DROP TABLE publikation;
+-- DROP TABLE csv_import;

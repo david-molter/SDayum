@@ -55,6 +55,26 @@ app.get('/search', (req, res) => {
     });
 });
 
+//New Page to examine all information according to a specific proteincomplex
+app.get('/entries/:id', async (req, res) => {
+    const id = req.params.id;
+    console.log('Complex ID:', id);
+    try {
+        const details = await db.get('SELECT * FROM complexinfo WHERE complexid = ?', [id]);
+        console.log('SQL Query:', 'SELECT * FROM complexinfo WHERE complexid = ?', [id]);
+
+        if (details) {
+            console.log('Details =', details);
+            res.render('entries', { details });
+        } else {
+            res.status(404).send('Eintrag nicht gefunden');
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Serverfehler');
+    }
+});
+
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });

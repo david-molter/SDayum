@@ -31,7 +31,7 @@
                         <% results.forEach(function(item) { %>
                             <tr>
                                 <td><%= item.complexid %></td>
-                                <td><%= item.name %></td>
+                                <td><a href="/entries/<%= item.complexid %>"><%= item.name %></a></td>
                                 <td><%= item.synonym %></td>
                                 <td><%= item.organismus %></td>
                                 <td><%= item.cell_line %></td>

@@ -1,4 +1,4 @@
-In diesem README werden Aufbau, Strukur und Bedienung des Datawarehouses beschrieben.
+In diesem README werden der Aufbau, die Struktur und die Bedienung sowie die Funktionen des Datawarehouses beschrieben.
 
 # Datenmodelle
 
@@ -25,7 +25,13 @@ Beim Server handelt es sich um einen Express-Server, wie er in den Vorgaben defi
 
 ## Server Backend
 
-Das Server-Backend wird durch die drei Dateien CORUM.js, searchArg.js und server.js definiert, alle ineinander greifen. 
-In der Datei server.js werden zunächst die benötigten node_module angefordert und der Port auf 1337 gesetzt. 
+Das Server-Backend wird durch die drei Dateien CORUM.js, searchArg.js und server.js definiert, alle ineinander greifen. Wobei die Datei server.js das Herzstück der Webanwendung darstellt. 
+
+### server.js 
+
+In der Datei server.js werden zunächst die benötigten node module angefordert inklusive der Etablierung des Servers als Express-Server und der Port auf 1337 gesetzt. Anschließend wird EJS als View Engine eingesetzt und der Pfad der Views auf die Root-Directory festgelegt, damit dynamische HTML-Anwendungen umgesetzt werden können. Außerdem wird die Verbindung mit der Datenbank mydb.db sowie eine Verbindung mit statischen Files wie dem Stylesheet style.css ermöglicht. 
+
+Nachfolgend werden die Server-Routen fpür die Übersicht ('/'), die Suchfunktion ('/search') und die Anzeige der einzelnen Einträge ('/entries:id') mit einem GET-Request verwirklicht. Dazu wird die Datei Proteinkomplexe.ejs gerendert und eine Suchfunktion etabliert, die in drei Spalten (name, complexid oder organismus) nach Einträgen sucht, welche eingegebenen Werte in die Suchanfrage enthalten (LIKE-Operator). Um die einzelnen Einträge über die Entry-Route darzustellen wird die ID des ausgewählten Komplexes mittels eines Loggers an die darauffolgende Datenbankabfrage übergeben. Hierbei werden die Einträge aller 4 Tabellen (s. Datenmodelle) nach der ID durchsucht und die zugehörgigen Informationen an die Entry-Seite geschickt.
 
 ## Server Frontend
+

@@ -14,7 +14,7 @@ npm install sqlite3 --save
 npm install express --save
 npm install css --save
 ```
-Nachdem alle im Datenbank-Ordner befindlichen Dateien heruntergeladen und lokal gespeichert wurden, kann der Server wie folgt im Terminal gestartet werden:
+Nachdem alle im GitHub-Repository befindlichen Dateien heruntergeladen und lokal an einem sinnvollen Ort gespeichert wurden und die Root-Directory auf diesen Speicherort gesetzt wurde, kann der Server wie folgt im Terminal gestartet werden:
 
 ```sh
 node server.js
@@ -26,11 +26,15 @@ Werden die Module beim Starten des Servers nicht gefunden, sollte der Dateipfad 
 
 ## Benutzen des Datawarehouses
 
-Beim Anzeigen des Servers im Browser unter der obigen Adresse erscheint eine Seite mit der Überschrift Proteinkomplexe und einer Suchleiste. Über die Suchleiste können sowohl alle Proteinkomplexe angezeigt werden (kein Eintrag in das Textfeld, bevor auf "Enter" oder "Suchen" gedrückt wird) als auch nach Complex ID, Komplex Name oder Organismus gefiltert werden. Das Suchargument ist hierbei logisch mit einer ODER-Verknüpfung aufgebaut und durchsucht die Datenbank nach Einträgen in den 3 genannten Spalten, die den Text/die Zahl aus der Suchanfrage beinhalten aber nicht zwingend identisch sind ('LIKE ?').
+Beim Anzeigen des Servers im Browser unter der obigen Adresse erscheint eine Seite mit der Überschrift Proteinkomplexe und einer Suchleiste. Wird in die Suchleiste nichts eingegeben, bevor auf `Enter`oder den Suchbutton geklickt wird, werden alle 5280  Proteinkomplexe paginiert dargestellt. Über die Eingabe einer Complex ID, eines Komplex Namens oder eines Organismus in die Suchleiste können die Einträge allerdings auch gefiltert werden. Das Suchargument ist hierbei logisch mit einer ODER-Verknüpfung aufgebaut und durchsucht die 3 genannten Spalten in der complexinfo-Tabelle der Datenbank nach Einträgen, die den Text/die Zahl aus der Suchanfrage beinhalten aber nicht zwingend identisch sind (`LIKE ?`).
 Die aufgelisteten Suchergebnisse sind nach aufsteigender Complex ID sortiert und paginiert. Pro Seite werden 10 Einträge angezeigt.
 
 Die Namen der einzelnen Einträge (Entries) sind anklickbar, und leiten den Benutzer auf eine Seite mit weiterführenden Informationen zu dem jeweiligen Eintrag weiter (z.B. http://localhost:1337/entries/1 für den Eintrag mit der Complex ID 1). Hier sind die allegemeine Informationen sowie Informationen zu den Untereinheiten des Proteinkomplexes, den Funktionen und den Referenzen (Kommentare, Methoden und PubMed ID der zugrundeliegenden Publikation) aufgeführt.  Die Informationen über die Funktionen und die Untereinheiten sind grafisch als Tabelle dargestellt.
 Für die UniProt ID, die Entrez ID, die GO ID und die PubMed ID sind zudem klickbare externe Links integriert die auf die Einträge der jeweiligen externen Datenbank verweisen.
+
+## Beenden des Servers
+
+Der Server kann aus dem Terminal heraus beendet werden, welches zum starten des Servers benutzt wurde, indem dort `Ctrl-C` eingeben wird.
 
 
 

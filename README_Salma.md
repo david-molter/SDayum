@@ -7,8 +7,8 @@ Dieses README stellt einen Teil der Prüfungsleistung für das Wahlpflichtmodul 
 2. Projektplanung
 3. Datenmodelle
 4. Server und Grafisches User Interface
-5. BWissenschaftliche Plots
-6. Zusammenfassung und Aussicht
+5. Wissenschaftliche Plots
+6. Zusammenfassung und Ideen zur Weiterentwicklung
 
 # 1. Zielsetzung
 
@@ -52,7 +52,10 @@ Nachfolgend werden die Server-Routen für die Übersicht (`app.get('/')`), die S
 
 Damit Server-Fehler entdeckt und behoben werden können, sind einige Error-Events im server.js integriert, sofern ein Fehler vorliegt. So können bei der Datenbankabfrage beispielsweise die Fehlertexte "'Fehler bei der Datenbankabfrage: `err`" (Probleme bei Abfrage der SQLite Datenbank z.B. bei Syntaxfehlern in der Suchanfrage), "Serverfehler" (Anfrage konnte generell nicht verarbeitet werden) oder "Eintrag nicht gefunden" (Zur eingegebenen ID kann kein Eintrag gefunden werden) im Output des Terminals ausgegeben werden. Dies vereinfacht das Troubleshooting sowohl bei der Anwendung als auch bei der Server-Entwicklung.
 
-
+Durch die Funktion 
+`app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
+});` kann der Server gestartet werden und er Benutzer bekommt die Rückmeldung, undter welcher URL er den Server in einem Browser finden kann.
 
 ## 4.2 Server Frontend
 
@@ -64,10 +67,15 @@ Wichtig für die einzelnen Entry-Seiten ist hier die Programmierung eines Links,
 
 Die Seite(n) zu den einzelnen Entries sind in der Datei `entries.ejs` programmiert. Der Inhalt der Entry-Seite hängt maßgeblich von der in der URL (s. o.) mitgegebenden ID ab. Anhand der ID findet eine Datenbankabfrage über den Server statt, die alle zu der ID gehörigen Informationen aus den 4 definierten Datenmodellen ausliest. Anhand dieser Daten wird die Entry-Seite gerendert.
 
+Neben den 4 thematisch aufgeteilten Tabellen mit den Informationen zu dem jeweiligen Proteinkomplex ist in der Datei entries.ejs auch ein Zurückbutton programmiert, der den Benutzer zurück auf das Ergebnis der vorhergegangen Suchanfrage führt. Außerdem sollten externe Links für die uniprot ID, die Entrez ID, die GO ID und die PubMed ID, damit über den Inhalt des CORUM-Datensatzes hinausgehende Informationen zum Proteinkomplex bzw. dessen Untereinheiten, der Funktion der Untereinheiten und der zugehörigen Quelle (Publikation) abgerufen werden können. Dies wurde am Beispiel der Uniprot ID anhand folgendem Code umgesetzt: `uniprotLink.href = `https://www.uniprot.org/uniprotkb/${uniprot[i].trim()}/entry``.
+
+ Zu den Tabellen der Entry-Seite wird im nächsten Abschnitt (5. Wissenschaftliche Plots) mehr erklärt.
 
 # 5. Wissenschaftliche Plots
 
-Bei den Daten des CORUM-Datensatzes handelt es sich bis auf die IDs und Referenzcodes ausschließlich um Informationen die den Datentyp Text haben. Da Auftragungen wie Balkendiagramme, Scatter-Plots oder Ähnliches für diesen Datentyp ungeeignet sind, wurden die Daten auf den Entry Seiten als Tabellen aufgetragen. Dabei wurden zwei Tabellentypen gewählt: eine "unsichtbare" Tabelle für einfache Zusammenhänge, wie für die Allgemeinen Informationen oder die Referenzen bei denen nur ein Eintrag pro Kategorie existiert (z. B. PubMed ID: xyz) und sichtbare Tabellen für die komplexeren Einträge. Die "unsichtbare" Tabelle dient hierbei mehr zu einer einheitlichen Gestaltung der Auflistung, da dies sie einfachste Umsetzung von Tab-Stops für den vorliegenden Fall darstellt. 
+Bei den Daten des CORUM-Datensatzes handelt es sich bis auf die IDs und Referenzcodes ausschließlich um Informationen die den Datentyp Text haben. Da Auftragungen wie Balkendiagramme, Scatter-Plots oder Ähnliches für diesen Datentyp ungeeignet sind, wurden die Daten auf den Entry Seiten als Tabellen aufgetragen. Die Darstellung ist in der entries.ejs und im style.css-Datei festgelegt. Dabei wurden zwei Tabellentypen gewählt: eine "unsichtbare" Tabelle für einfache Zusammenhänge, wie für die Allgemeinen Informationen oder die Referenzen bei denen nur ein Eintrag pro Kategorie existiert (z. B. PubMed ID: xyz) und sichtbare Tabellen für die komplexeren Einträge. Die "unsichtbare" Tabelle dient hierbei mehr zu einer einheitlichen Gestaltung der Auflistung, da dies sie einfachste Umsetzung von Tab-Stops für den vorliegenden Fall darstellt. 
 Die "sichtbare" Tabelle ist grafisch über das CSS-Stylesheet definiert und findet auch in auf der Seite zu den Proteinkomplexen Anwendung. Sie ist so formatiert, dass die Zeilen der Tabelle abwechselnd weiß oder beige hinterlegt sind und dunkel hervorgehoben werden, wenn mit dem Cursor darüber gefahren wird. Somit wird die Lesbarkeite der Tabelleneinträge für den Benutzer vereinfacht. Eine Besonderheit der "sichtbaren" Tabellen der Entry-Seiten ist, dass die Einträge der Datenbank nicht einfach nur aufgerufen werden, sondern mit Semikolon als Trennzeichen auf dem Server in eine neue Untertabelle geschrieben werden. Dies ist möglich da die Einträge in den Funktions- und Untereinheitentabellen der Datenbank innerhalb der einzelnen Zellen durch Semikolon getrennt sind (z.B. mehrere GO-IDs und GO-Beschreibungen zum selben Proteinkomplex).
 
-# 6. Zusammenfassung und Aussicht
+# 6. Zusammenfassung und Ideen zur Weiterentwicklung
+
+Insgesamt ist es gelungen ein Datawarehouse mit grundlegenden Lesefunktionen inklusive Paginierung und Suchfunktion auf Basis eines der ausgegebenen Datensätze aufzubauen. Dies konnte unter Verwendung von SQLite, JavaScript, HTML und CSS umgesetzt und ein RESTful-Webserver aufgesetzt werden. Das Datawarehouse hat mehrere Ebenen: ganz unten die relationale Datenbank mydb.db, die 4 untereinander verbundene Datenmodelle beinhaltet, welche mit den Daten des ausgegebenen Datensatzes befüllt werden konnte, darauf basierend das Server-Backend mit der Datei server.js und darüber wiederum das Server-Frontend als dritte Ebene, welches anhand der EJS-Dateien und eines CSS-Stylesheets etabliert wurde. Somit können die Daten des CORUM-Datensatzes strukturiert ausgelesen werden und sogar im Datensatz referenzierte, weiterführende Informationen zu den Einträgen auf externen Seite gefunden werden. Interssant wäre es an dieser Stelle sicherlich, wenn dem Datawarehouse zusätzlich zu den bereits umgesetzen Lesefunktionen auch noch Schreibfunktionen hinzugefügt werden würden, sodass neue Einträge in die Datenbank eingespeist und bestehende Einträge verändert oder gelöscht werden können. 

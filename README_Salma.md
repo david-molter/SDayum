@@ -2,13 +2,26 @@
 
 Dieses README stellt einen Teil der Prüfungsleistung für das Wahlpflichtmodul SDAM im Sommersemester 2024 dar. Hierin soll gezeigt werden, welche Überlegungen dem erstellten Datawarehouse zugrundeliegen und wie diese In Programmcode umgesetzt wurden. Es werden die Zielsetzung des Projekt, der Aufbau und die Struktur der erstellten Datenbank und die Umsetzung des Datawarehouse als lokaler Server mit Grafischem User Interface beschrieben.
 
-# Zielsetzung
+# Inhalt
+1. Zielsetzung
+2. Projektplanung
+3. Datenmodelle
+4. Server
+5. Bemerkungen
+6. Zusammenfassung und Aussicht
 
-Die Zielsetzung für das Projekt ergibt sich aus den Anforderungen an die Prüfungsleistung. So soll ein Datawarehouse auf der Basis eines der ausgegebenen Datensätze erstellt werden. Dies soll auf mehreren Ebenen geschehen. Auf der Datenbankebene sollen mehrere Datenmodelle in einer SQLite3-Datenbank etabliert werden, welche mit den Daten des ausgewählten Datensatzes befüllt werden soll. Zudem soll ein Server in JavaScript programmiert werden, der grundlegende Lesefunktionen ermöglicht, wie das Auslesen eines spezifischen Eintrags aus der Datenbank über eine Suchfunktion. Das Frontend des Servers soll in HTML bzw. Embedded JavaScript (EJS) und CSS aufgebaut werden. Hierbei soll auch ein grafisches User Interface (GUI) umgesetzt werden, welches dem Benutzer ermöglicht, die Einträge im Datawarehouse auf einfache Art (Klicken, Suchen) auszulesen.
+# 1. Zielsetzung
 
-# Datenmodelle
+Die Zielsetzung für das Projekt ergibt sich aus den Anforderungen an die Prüfungsleistung. So soll ein Datawarehouse auf der Basis eines der ausgegebenen Datensätze erstellt werden. Dies soll auf mehreren Ebenen geschehen. Auf der Datenbankebene sollen mehrere Datenmodelle in einer SQLite3-Datenbank etabliert werden, welche mit den Daten des ausgewählten Datensatzes befüllt werden soll. Zudem soll ein Server in JavaScript programmiert werden, der grundlegende Lesefunktionen ermöglicht, wie das Auslesen eines spezifischen Eintrags aus der Datenbank über eine Suchfunktion. Das Frontend des Servers soll in HTML bzw. Embedded JavaScript (EJS) und CSS aufgebaut werden. Hierbei soll auch ein grafisches User Interface (GUI) umgesetzt werden, welches dem Benutzer ermöglicht, die Einträge im Datawarehouse auf einfache Art (Klicken, Suchen) auszulesen. Zudem sollen die Daten des Datensatzes in wissenschaftlichen Plots dargestellt werden.
 
-Für den ausgegebenen Datensatz aus der CORUM-Datenbank wurden relationale Datenmodelle gewählt, da diese eine gute Abfrageeffizienz aufweisen. Dazu wurde der Datensatz thematisch in 4 Tabellen (Datenmodelle) unterteilt: Eine Tabelle mit Übersichtsinformationen (complexinfo) sowie Tabellen zu den Proteinuntereinheiten (untereinheiten), den Funktionen (funktion) und der Publikation aus der die Daten stammen (publikation).
+# 2. Projektplanung
+
+Zur Umsetzung der Ziele wurde ein Projektplan erstellt, der sich in mehrere Phasen unterteilt: Auseinandersetzen jedes einzelnen Gruppenmitglieds mit allen ausgegebenen Datensätzen, Diskussion und Wahl eines Datensatzes, Festlegung der Datenmodelle und Strukturierung der Daten, Aufbau einer Datenbank in SQLite3 und befüllen der Datenbank mit Daten des Datensatzes und Programmieren des Servers inklusive Backend und Frontend.
+
+# 3. Datenmodelle
+
+Zuerst wurden alle ausgegebenen Datensätze betrachtet und diskutiert, welcher Datensatz in der Gruppe präferiert wird um Datenmodelle zu etablieren und ein Datawarehouse zu erstellen. Dabei wurde sich für die CORUM-Datensatz entschieden, da dessen Daten für alle Gruppenmitglieder inhaltlich am besten greifbar und am interessantesten war. Der CORUM-Datensatz (CORUM = comprehensive resource of mammalian protein complexes) beinhaltet Daten zum Aufbau und der Funktion von Proteinkomplexee aus Säugern. 
+Für den ausgegebenen Datensatz aus der CORUM-Datenbank wurden relationale Datenmodelle gewählt, da diese eine gute Abfrageeffizienz aufweisen. Dazu wurde der Datensatz thematisch in 4 Tabellen (Datenmodelle) unterteilt: Eine Tabelle mit Übersichtsinformationen (complexinfo) sowie Tabellen zu den Proteinuntereinheiten (untereinheiten), den Funktionen (funktion) und der Publikation aus der die Daten stammen (publikation). Alle Tabellen sind durch Primary und Foreign Keys miteinander verknüpft.
 
 | Tabelle       | Spalten (Namen aus txt-Datei, keine Keys)     | Primary Key   | Foreign Keys              |
 |---------------|-----------------------------------------------|---------------|---------------------------|
@@ -17,27 +30,41 @@ Für den ausgegebenen Datensatz aus der CORUM-Datenbank wurden relationale Daten
 | publikation   | Protein complex purification method, Complex comment, Disease complex, Subunits comment, PubMed ID| pubid | complex_id, sub_id |
 | funktion      | FunCat ID, FunCat description, GO ID, GO description | funid | complex_id |
 
-Die complexid stammt hierbei aus der Originaltabelle. Die sub_id, pub_id und fun_id sind jedoch neu vergeben und entsprechen den Werten der complexid.
+Die complexid stammt hierbei aus der Originaltabelle. Die sub_id, pub_id und fun_id sind jedoch neu vergeben und entsprechen den Werten der complexid. Die Tabelle `complexinfo` beinhaltet in der erstellten Datenbank im wesentliche allgemeine Informationen und nimmt bei der Entwicklung des Servers (s.u.) eine zentrale Rolle ein.
 
-## Implementieren in SQL - CORUM.sql
+## 3.1 Implementieren in SQLite3 - CORUM.sql
 
-In SQLite3 wurden die oben beschriebenen 4 Tabellen erzeugt und die Datentypen der Einträge festgelegt. Die Relationen zwischen den Tabellen wurden mittels Indexen separat noch einmal festegehalten um die Abfraggeschwindigkeit zu erhöhen. Anschließend wurde ein Skript erstellt, mit dem die Tabellen aus einer CSV-Datei heraus befüllt werden können. Hierfür wurde die ausgegebene TXT-Datei (`allComplexes.txt`) in eine CSV-Datei umgeschrieben. Damit es beim Import keinen Datatype-Mismatch gibt, wurden die Spaltentitel gelöscht und Spalten für sub_id, pub_id und fun_id hinzugefügt indem die ComplexID-Spalte vervielfätigt wurde. Die CSV-Datei wurde dann in eine Import-Tabelle (`csv_import`) importiert und die entsprechenden Spalten in die 4 CORUM-Tabellen eingefügt. Die Import-Tabelle wird dann gelöscht und die Änderungen über Commit in die mit der SQL-Datei verbundenen Datenbankdatei (`mydb.db`) geschrieben.
+In der Datei `CORUM.sql` werden die oben beschriebenen 4 Tabellen SQLite3 erzeugt und die Datentypen der Einträge festgelegt. Die Relationen zwischen den Tabellen werden mittels Indizes separat noch einmal festegehalten um die Abfraggeschwindigkeit zu erhöhen. Anschließend wird ein Skript erstellt, mit dem die Tabellen aus einer CSV-Datei heraus befüllt werden können. Hierfür wird die ausgegebene TXT-Datei (`allComplexes.txt`) in eine CSV-Datei umgeschrieben. Damit es beim Import keinen Datatype-Mismatch gibt, werden die Spaltentitel gelöscht und Spalten für sub_id, pub_id und fun_id hinzugefügt indem die ComplexID-Spalte vervielfätigt wird. Die CSV-Datei wird dann in eine Import-Tabelle (`csv_import`) importiert und die entsprechenden Spalten in die 4 CORUM-Tabellen eingefügt. Die Import-Tabelle wird dann gelöscht und die Änderungen über Commit in die mit der SQL-Datei verbundenen Datenbankdatei (`mydb.db`) geschrieben.
 
 ACHTUNG: Unter dem Commit-Statement befinden sich DROP Table- Statements, die nicht mitausgeführt werden sollten! Sie stammen aus der Entwicklung des Codes bzw. dem Testen seiner Ausführbarkeit!
 
-# Server
+# 4. Server
 
-Beim Server handelt es sich um einen Express-Server, wie er in den Vorgaben definiert ist. Das Server-Backend wurde mit Javascript geschrieben, das Frontend mit mit HTML beziehungsweise embedded Javascript (ejs). Das Grunddesign ist in einem CSS-Stylesheet festgehalten.
+Beim Server handelt es sich um einen Express-Server, wie er in den Vorgaben definiert ist. Das Server-Backend wurde mit Javascript geschrieben, das Frontend mit HTML beziehungsweise embedded Javascript (ejs). Das Grunddesign ist in einem CSS-Stylesheet festgehalten.
 
-## Server Backend
+## 4.1 Server Backend
 
-Das Server-Backend wird durch die Datei server.js definiert, die die wesentlichen Funktionen des Servers definiert und die Anfragen des Frontends (EJS-Dateien) verarbeitet. 
+Das Server-Backend wird durch die Datei server.js definiert, in welcher die wesentlichen Funktionen (Paginierung, Suchen, Anzeigen, Auslesen) des Servers programmiert wurden. Die Datei `server.js` verarbeitet die Anfragen des Frontends (EJS-Dateien). 
 
-### server.js 
+### 4.1.1 server.js 
 
-In der Datei server.js werden zunächst die benötigten node module angefordert inklusive der Etablierung des Servers als Express-Server und der Port auf 1337 gesetzt. Anschließend wird EJS als View Engine eingesetzt und der Pfad der Views auf die Root-Directory festgelegt, damit dynamische HTML-Anwendungen umgesetzt werden können. Außerdem wird die Verbindung mit der Datenbank mydb.db sowie eine Verbindung mit statischen Files wie dem Stylesheet style.css ermöglicht. 
+In der Datei server.js werden zunächst die benötigten Node-Module angefordert inklusive der Etablierung des Servers als Express-Server und der Port auf 1337 gesetzt. Anschließend wird EJS als View-Engine eingesetzt und der Pfad der Views auf die Root-Directory festgelegt, damit dynamische HTML-Anwendungen umgesetzt werden können. Außerdem wird die Verbindung mit der Datenbank `mydb.db` sowie eine Verbindung mit statischen Files wie dem Stylesheet `style.css` ermöglicht. 
 
 Nachfolgend werden die Server-Routen für die Übersicht (`/`), die Suchfunktion (`/search`) und die Anzeige der einzelnen Einträge (`/entries:id`) mit einem GET-Request verwirklicht. Dazu wird die Datei Proteinkomplexe.ejs gerendert und eine Suchfunktion etabliert, die in drei Spalten (name, complexid oder organismus) nach Einträgen sucht, welche eingegebenen Werte in die Suchanfrage enthalten (`LIKE`-Operator). Um die einzelnen Einträge über die Entry-Route darzustellen wird die ID des ausgewählten Komplexes mittels eines Loggers an die darauffolgende Datenbankabfrage übergeben. Hierbei werden die Einträge aller 4 Tabellen (s. Datenmodelle) nach der ID durchsucht und die zugehörgigen Informationen an die Entry-Seite geschickt.
 
-## Server Frontend
+## 4.2 Server Frontend
 
+Das Server Frontend wird durch die 3 Dateien `Proteinkomplexe.ejs`, `entries.ejs` und `style.css` gebildet. 
+
+### 4.2.1
+
+### 4.2.2
+
+### 4.2.3
+
+# 5. Wissenschaftliche Plots
+
+Bei den Daten des CORUM-Datensatzes handelt es sich bis auf die IDs und Referenzcodes ausschließlich um Informationen die den Datentyp Text haben. Da Auftragungen wie Balkendiagramme, Scatter-Plots oder Ähnliches für diesen Datentyp ungeeignet sind, wurden die Daten auf den Entry Seiten als Tabellen aufgetragen. Dabei wurden zwei Tabellentypen gewählt: eine "unsichtbare" Tabelle für einfache Zusammenhänge, wie für die Allgemeinen Informationen oder die Referenzen bei denen nur ein Eintrag pro Kategorie existiert (z. B. PubMed ID: xyz) und sichtbare Tabellen für die komplexeren Einträge. Die "unsichtbare" Tabelle dient hierbei mehr zu einer einheitlichen Gestaltung der Auflistung, da dies sie einfachste Umsetzung von Tab-Stops für den vorliegenden Fall darstellt. 
+Die "sichtbare" Tabelle ist grafisch über das CSS-Stylsheet definiert und findet auch in auf der Seite zu den Proteinkomplexen Anwendung. Sie ist so formatiert, dass die Zeilen der Tabelle abwechselnd weiß oder beige hinterlegt sind und dunkel hervorgehoben werden, wenn mit dem Cursor darüber gefahren wird. Somit wird die Lesbarkeite der Tabelleneinträge für den Benutzer vereinfacht. Eine Besonderheit der "sichtbaren" Tabellen der Entry-Seiten ist, dass die Einträge der Datenbank nicht einfach nur aufgerufen werden, sondern mit Semikolon als Trennzeichen auf dem Server in eine neue Untertabelle geschrieben werden. Dies ist möglich da die Einträge in den Funktions- und Untereinheitentabellen der Datenbank innerhalb der einzelnen Zellen durch Semikolon getrennt sind (z.B. mehrere GO-IDs und GO-Beschreibungen zum selben Proteinkomplex).
+
+# 6. Zusammenfassung und Aussicht

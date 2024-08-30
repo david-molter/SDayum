@@ -45,11 +45,11 @@
             <div id="pagination" class="pagination button">
                 <% if (totalPages > 1) { %>
                     <% if (page > 1) { %>
-                        <a href="/search?q=<%= query %>&page=<%= page - 1 %>">&laquo; Previous</a>
+                        <a href="/search?q=<%= query %>&page=<%= page - 1 %>">&laquo; Vorherige Seite </a>
                     <% } %>
                     <span> Page <%= page %> of <%= totalPages %> </span>
                     <% if (page < totalPages) { %>
-                        <a href="/search?q=<%= query %>&page=<%= page + 1 %>">Next &raquo;</a>
+                        <a href="/search?q=<%= query %>&page=<%= page + 1 %>"> Nächste Seite &raquo;</a>
                     <% } %>
                 <% } %>
             </div>

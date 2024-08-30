@@ -6,8 +6,8 @@ Dieses README stellt einen Teil der Prüfungsleistung für das Wahlpflichtmodul 
 1. Zielsetzung
 2. Projektplanung
 3. Datenmodelle
-4. Server
-5. Bemerkungen
+4. Server und Grafisches User Interface
+5. BWissenschaftliche Plots
 6. Zusammenfassung und Aussicht
 
 # 1. Zielsetzung
@@ -16,7 +16,7 @@ Die Zielsetzung für das Projekt ergibt sich aus den Anforderungen an die Prüfu
 
 # 2. Projektplanung
 
-Zur Umsetzung der Ziele wurde ein Projektplan erstellt, der sich in mehrere Phasen unterteilt: Auseinandersetzen jedes einzelnen Gruppenmitglieds mit allen ausgegebenen Datensätzen, Diskussion und Wahl eines Datensatzes, Festlegung der Datenmodelle und Strukturierung der Daten, Aufbau einer Datenbank in SQLite3 und befüllen der Datenbank mit Daten des Datensatzes und Programmieren des Servers inklusive Backend und Frontend.
+Zur Umsetzung der Ziele wurde ein Projektplan erstellt, der sich in mehrere Phasen unterteilt: Auseinandersetzen jedes einzelnen Gruppenmitglieds mit allen ausgegebenen Datensätzen, Diskussion und Wahl eines Datensatzes,Festlegung der Datenmodelle und Strukturierung der Daten, Setup der Programmierumgebung in VSCode und Verbinden mit einem Git-Repository auf GitHub, Aufbau einer Datenbank in SQLite3 und befüllen der Datenbank mit Daten des Datensatzes und Programmieren des Servers inklusive Backend und Frontend.
 
 # 3. Datenmodelle
 
@@ -48,14 +48,21 @@ Das Server-Backend wird durch die Datei server.js definiert, in welcher die wese
 
 In der Datei server.js werden zunächst die benötigten Node-Module angefordert inklusive der Etablierung des Servers als Express-Server und der Port auf 1337 gesetzt. Anschließend wird EJS als View-Engine eingesetzt und der Pfad der Views auf die Root-Directory festgelegt, damit dynamische HTML-Anwendungen umgesetzt werden können. Außerdem wird die Verbindung mit der Datenbank `mydb.db` sowie eine Verbindung mit statischen Files wie dem Stylesheet `style.css` ermöglicht. 
 
-Nachfolgend werden die Server-Routen für die Übersicht (`/`), die Suchfunktion (`/search`) und die Anzeige der einzelnen Einträge (`/entries:id`) mit einem GET-Request verwirklicht. Dazu wird die Datei Proteinkomplexe.ejs gerendert und eine Suchfunktion etabliert, die in drei Spalten (name, complexid oder organismus) nach Einträgen sucht, welche eingegebenen Werte in die Suchanfrage enthalten (`LIKE`-Operator). Um die einzelnen Einträge über die Entry-Route darzustellen wird die ID des ausgewählten Komplexes mittels eines Loggers an die darauffolgende Datenbankabfrage übergeben. Hierbei werden die Einträge aller 4 Tabellen (s. Datenmodelle) nach der ID durchsucht und die zugehörgigen Informationen an die Entry-Seite geschickt.
+Nachfolgend werden die Server-Routen für die Übersicht (`app.get('/')`), die Suchfunktion (`app.get('/search')`) und die Anzeige der einzelnen Einträge (`app.get('entries/:id')`) mit einem GET-Request verwirklicht. Dazu wird die Datei Proteinkomplexe.ejs gerendert und eine Suchfunktion etabliert, die in drei Spalten (name, complexid oder organismus) nach Einträgen sucht, welche eingegebenen Werte in die Suchanfrage enthalten (`LIKE`-Operator). Um die einzelnen Einträge über die Entry-Route darzustellen wird die ID des ausgewählten Komplexes mittels eines Loggers an die darauffolgende Datenbankabfrage übergeben. Hierbei werden die Einträge aller 4 Tabellen (s. Datenmodelle) nach der ID durchsucht und die zugehörgigen Informationen an die Entry-Seite geschickt.
+
+Damit Server-Fehler entdeckt und behoben werden können, sind einige Error-Events im server.js integriert, sofern ein Fehler vorliegt. So können bei der Datenbankabfrage beispielsweise die Fehlertexte "'Fehler bei der Datenbankabfrage: `err`" (Probleme bei Abfrage der SQLite Datenbank z.B. bei Syntaxfehlern in der Suchanfrage), "Serverfehler" (Anfrage konnte generell nicht verarbeitet werden) oder "Eintrag nicht gefunden" (Zur eingegebenen ID kann kein Eintrag gefunden werden) im Output des Terminals ausgegeben werden. Dies vereinfacht das Troubleshooting sowohl bei der Anwendung als auch bei der Server-Entwicklung.
+
+
 
 ## 4.2 Server Frontend
 
-Das Server Frontend wird durch die 3 Dateien `Proteinkomplexe.ejs`, `entries.ejs` und `style.css` gebildet. Das CSS-Stylesheet gibt dabei vor, wie die Elemente des Servers standardmäßig dargestellt werden und formatiert beispielsweise eine Standard-Tabelle, den Hintergrund der Webseite, die Schriftgröße, die Designs der klickbaren Buttons (Paginierung, Suchen, Zurück) und Überschriften. Das Style-Sheet ist in beide EJS-Dateien eingebunden (`<link rel="stylesheet" href="/style.css">`), kann aber durch in-line Commands in den EJS-Dateien ausgehebelt werden.
+Das Server Frontend und damit auch das Grafische User Interface wird durch die 3 Dateien `Proteinkomplexe.ejs`, `entries.ejs` und `style.css` gebildet. Das CSS-Stylesheet gibt dabei vor, wie die Elemente des Servers standardmäßig dargestellt werden und formatiert beispielsweise eine Standard-Tabelle, den Hintergrund der Webseite, die Schriftgröße, die Designs der klickbaren Buttons (Paginierung, Suchen, Zurück) und Überschriften. Das Style-Sheet ist in beide EJS-Dateien eingebunden (`<link rel="stylesheet" href="/style.css">`), kann aber durch in-line Commands in den EJS-Dateien ausgehebelt werden.
 Die EJS-Dateien wiederum kommunizieren bidirektional mit dem der server.js Datei im Backend, sodass die Funtkionen des Servers dynamisch in einem Grafischen User Interface durch den Benutzer angewendet werden können. 
 
-Zuerst wurde die EJS-Datei `Proteinkomplexe.ejs` erstellt und darin neben Der Überschrift der Seite auch die Kommunikation mit dem darunterliegenden Server-Backend bezüglich der Anzeige der gesamten Komplexe in der Datenbank (Spalten comlexid, complex_name, synonym und organismus aus der complexinfo Tabelle der Datenbank), des Durchsuchens der Datenbank (wieder dieselben Spalten) und der Paginierung programmiert. 
+Zuerst wurde die EJS-Datei `Proteinkomplexe.ejs` erstellt und darin neben Der Überschrift der Seite auch die Kommunikation mit dem darunterliegenden Server-Backend bezüglich der Anzeige der gesamten Komplexe in der Datenbank (Spalten comlexid, complex_name, synonym und organismus aus der complexinfo Tabelle der Datenbank), des Durchsuchens bzw.Filterns der Datenbank (wieder in der Tabelle complexinfo, Kommunikation an Server bei klicken der Searchbar oder Enter) und der Paginierung programmiert. Die Paginierung ist so programmiert, dass ein Button für dievorherige Seite nur angezeigt wird, wenn die aktuelle Seitenzahl >1 ist.
+Wichtig für die einzelnen Entry-Seiten ist hier die Programmierung eines Links, dem bei klicken des Komplexnamens gefolgt wird. Das ist in der Proteinkomplexe.ejs so umgesetzt, dass die complex_id die vom Server aus der Datenbank zu dem Eintrag gezogen wird, in die Route zu einer so eindeutig zuordnenbaren Entry-Seite integriert wird (`<td><a href="/entries/<%= item.complexid %>"><%= item.name %></a></td>`). 
+
+Die Seite(n) zu den einzelnen Entries sind in der Datei `entries.ejs` programmiert. Der Inhalt der Entry-Seite hängt maßgeblich von der in der URL (s. o.) mitgegebenden ID ab. Anhand der ID findet eine Datenbankabfrage über den Server statt, die alle zu der ID gehörigen Informationen aus den 4 definierten Datenmodellen ausliest. Anhand dieser Daten wird die Entry-Seite gerendert.
 
 
 # 5. Wissenschaftliche Plots

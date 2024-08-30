@@ -47,7 +47,7 @@
                     <% if (page > 1) { %>
                         <a href="/search?q=<%= query %>&page=<%= page - 1 %>">&laquo; Vorherige Seite </a>
                     <% } %>
-                    <span> Page <%= page %> of <%= totalPages %> </span>
+                    <span> Seite <%= page %> von <%= totalPages %> </span>
                     <% if (page < totalPages) { %>
                         <a href="/search?q=<%= query %>&page=<%= page + 1 %>"> Nächste Seite &raquo;</a>
                     <% } %>

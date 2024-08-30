@@ -38,7 +38,7 @@ In der Datei `CORUM.sql` werden die oben beschriebenen 4 Tabellen SQLite3 erzeug
 
 ACHTUNG: Unter dem Commit-Statement befinden sich DROP Table- Statements, die nicht mitausgeführt werden sollten! Sie stammen aus der Entwicklung des Codes bzw. dem Testen seiner Ausführbarkeit!
 
-# 4. Server
+# 4. Server und Grafisches User Interface
 
 Beim Server handelt es sich um einen Express-Server, wie er in den Vorgaben definiert ist. Das Server-Backend wurde mit Javascript geschrieben, das Frontend mit HTML beziehungsweise embedded Javascript (ejs). Das Grunddesign ist in einem CSS-Stylesheet festgehalten.
 
@@ -46,25 +46,21 @@ Beim Server handelt es sich um einen Express-Server, wie er in den Vorgaben defi
 
 Das Server-Backend wird durch die Datei server.js definiert, in welcher die wesentlichen Funktionen (Paginierung, Suchen, Anzeigen, Auslesen) des Servers programmiert wurden. Die Datei `server.js` verarbeitet die Anfragen des Frontends (EJS-Dateien). 
 
-### 4.1.1 server.js 
-
 In der Datei server.js werden zunächst die benötigten Node-Module angefordert inklusive der Etablierung des Servers als Express-Server und der Port auf 1337 gesetzt. Anschließend wird EJS als View-Engine eingesetzt und der Pfad der Views auf die Root-Directory festgelegt, damit dynamische HTML-Anwendungen umgesetzt werden können. Außerdem wird die Verbindung mit der Datenbank `mydb.db` sowie eine Verbindung mit statischen Files wie dem Stylesheet `style.css` ermöglicht. 
 
 Nachfolgend werden die Server-Routen für die Übersicht (`/`), die Suchfunktion (`/search`) und die Anzeige der einzelnen Einträge (`/entries:id`) mit einem GET-Request verwirklicht. Dazu wird die Datei Proteinkomplexe.ejs gerendert und eine Suchfunktion etabliert, die in drei Spalten (name, complexid oder organismus) nach Einträgen sucht, welche eingegebenen Werte in die Suchanfrage enthalten (`LIKE`-Operator). Um die einzelnen Einträge über die Entry-Route darzustellen wird die ID des ausgewählten Komplexes mittels eines Loggers an die darauffolgende Datenbankabfrage übergeben. Hierbei werden die Einträge aller 4 Tabellen (s. Datenmodelle) nach der ID durchsucht und die zugehörgigen Informationen an die Entry-Seite geschickt.
 
 ## 4.2 Server Frontend
 
-Das Server Frontend wird durch die 3 Dateien `Proteinkomplexe.ejs`, `entries.ejs` und `style.css` gebildet. 
+Das Server Frontend wird durch die 3 Dateien `Proteinkomplexe.ejs`, `entries.ejs` und `style.css` gebildet. Das CSS-Stylesheet gibt dabei vor, wie die Elemente des Servers standardmäßig dargestellt werden und formatiert beispielsweise eine Standard-Tabelle, den Hintergrund der Webseite, die Schriftgröße, die Designs der klickbaren Buttons (Paginierung, Suchen, Zurück) und Überschriften. Das Style-Sheet ist in beide EJS-Dateien eingebunden (`<link rel="stylesheet" href="/style.css">`), kann aber durch in-line Commands in den EJS-Dateien ausgehebelt werden.
+Die EJS-Dateien wiederum kommunizieren bidirektional mit dem der server.js Datei im Backend, sodass die Funtkionen des Servers dynamisch in einem Grafischen User Interface durch den Benutzer angewendet werden können. 
 
-### 4.2.1
+Zuerst wurde die EJS-Datei `Proteinkomplexe.ejs` erstellt und darin neben Der Überschrift der Seite auch die Kommunikation mit dem darunterliegenden Server-Backend bezüglich der Anzeige der gesamten Komplexe in der Datenbank (Spalten comlexid, complex_name, synonym und organismus aus der complexinfo Tabelle der Datenbank), des Durchsuchens der Datenbank (wieder dieselben Spalten) und der Paginierung programmiert. 
 
-### 4.2.2
-
-### 4.2.3
 
 # 5. Wissenschaftliche Plots
 
 Bei den Daten des CORUM-Datensatzes handelt es sich bis auf die IDs und Referenzcodes ausschließlich um Informationen die den Datentyp Text haben. Da Auftragungen wie Balkendiagramme, Scatter-Plots oder Ähnliches für diesen Datentyp ungeeignet sind, wurden die Daten auf den Entry Seiten als Tabellen aufgetragen. Dabei wurden zwei Tabellentypen gewählt: eine "unsichtbare" Tabelle für einfache Zusammenhänge, wie für die Allgemeinen Informationen oder die Referenzen bei denen nur ein Eintrag pro Kategorie existiert (z. B. PubMed ID: xyz) und sichtbare Tabellen für die komplexeren Einträge. Die "unsichtbare" Tabelle dient hierbei mehr zu einer einheitlichen Gestaltung der Auflistung, da dies sie einfachste Umsetzung von Tab-Stops für den vorliegenden Fall darstellt. 
-Die "sichtbare" Tabelle ist grafisch über das CSS-Stylsheet definiert und findet auch in auf der Seite zu den Proteinkomplexen Anwendung. Sie ist so formatiert, dass die Zeilen der Tabelle abwechselnd weiß oder beige hinterlegt sind und dunkel hervorgehoben werden, wenn mit dem Cursor darüber gefahren wird. Somit wird die Lesbarkeite der Tabelleneinträge für den Benutzer vereinfacht. Eine Besonderheit der "sichtbaren" Tabellen der Entry-Seiten ist, dass die Einträge der Datenbank nicht einfach nur aufgerufen werden, sondern mit Semikolon als Trennzeichen auf dem Server in eine neue Untertabelle geschrieben werden. Dies ist möglich da die Einträge in den Funktions- und Untereinheitentabellen der Datenbank innerhalb der einzelnen Zellen durch Semikolon getrennt sind (z.B. mehrere GO-IDs und GO-Beschreibungen zum selben Proteinkomplex).
+Die "sichtbare" Tabelle ist grafisch über das CSS-Stylesheet definiert und findet auch in auf der Seite zu den Proteinkomplexen Anwendung. Sie ist so formatiert, dass die Zeilen der Tabelle abwechselnd weiß oder beige hinterlegt sind und dunkel hervorgehoben werden, wenn mit dem Cursor darüber gefahren wird. Somit wird die Lesbarkeite der Tabelleneinträge für den Benutzer vereinfacht. Eine Besonderheit der "sichtbaren" Tabellen der Entry-Seiten ist, dass die Einträge der Datenbank nicht einfach nur aufgerufen werden, sondern mit Semikolon als Trennzeichen auf dem Server in eine neue Untertabelle geschrieben werden. Dies ist möglich da die Einträge in den Funktions- und Untereinheitentabellen der Datenbank innerhalb der einzelnen Zellen durch Semikolon getrennt sind (z.B. mehrere GO-IDs und GO-Beschreibungen zum selben Proteinkomplex).
 
 # 6. Zusammenfassung und Aussicht

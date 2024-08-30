@@ -1,6 +1,18 @@
 # README zur Prüfungsleistung im Modul "Scientific Data Management"
 
-Im folgenden README wird der Aufbau und die Nutzung des Data-Warehouses beschrieben. 
+Im folgenden README wird der Aufbau und die Nutzung des Data-Warehouses beschrieben.
+
+## Herunterladen des Servers
+
+Die benötigten Datein für den Server sind auf folgendem Github-Repository zu finden https://github.com/david-molter/SDayum. Um den Server starten zu können werden folgende Dateien benötigt:
+
+- server.js
+- mydb.db
+- Proteinkomplexe.ejs
+- entries.ejs
+- style.css
+
+Die Dateien sollten alle in dem gleichen Ordner liegen, damit die im Code definierten Directorys stimmen und die verschiedenen Anwendungen aus einander zugreifen können.
 
 ## Starten des Data-Warehouses
 
@@ -13,8 +25,9 @@ npm install sqlite --save
 npm install sqlite3 --save
 npm install express --save
 npm install css --save
+npm install ejs --save
 ```
-Nachdem alle im GitHub-Repository befindlichen Dateien heruntergeladen und lokal an einem sinnvollen Ort gespeichert wurden und die Root-Directory auf diesen Speicherort gesetzt wurde, kann der Server wie folgt im Terminal gestartet werden:
+Wurden die im vorherigen Kapitel aufgeführten Datein vom Repository heruntergeladen, kann die Root-Directory auf diesen Speicherort gesetzt werden und der Server wie folgt im Terminal gestartet werden:
 
 ```sh
 node server.js
@@ -35,7 +48,3 @@ Für die UniProt ID, die Entrez ID, die GO ID und die PubMed ID sind zudem klick
 ## Beenden des Servers
 
 Der Server kann aus dem Terminal heraus beendet werden, welches zum starten des Servers benutzt wurde, indem dort `Ctrl-C` eingeben wird.
-
-
-
-

@@ -35,17 +35,17 @@ node server.js
 
 Der Server sollte nun auf Port 1337 laufen und mit einem Browser der Wahl (z.B. Firefox, Safari, Chrome etc.) über die Adresse http://localhost:1337/ abrufbar sein. 
 
-Werden die Module beim Starten des Servers nicht gefunden, sollte der Dateipfad so gewählt werden, dass die Module im selben Ordner wie die Datei server.js gewählt werden.
+Werden die Module beim Starten des Servers nicht gefunden, sollte der Dateipfad so gewählt werden, dass die Module in einem Ordner namens "node_modules" sich im selben Ordner befindet wie die Datei server.js.
 
 ## Benutzen des Datawarehouses
 
-Beim Anzeigen des Servers im Browser unter der obigen Adresse erscheint eine Seite mit der Überschrift Proteinkomplexe und einer Suchleiste. Wird in die Suchleiste nichts eingegeben, bevor auf `Enter` oder den Suchbutton geklickt wird, werden alle 5280  Proteinkomplexe paginiert aufgerufen und dargestellt. Über die Eingabe von Text oder einer Zahl (z.B. ein Bestandteil eines Komplexnamens oder einer Complex-ID) in die Suchleiste können die Einträge allerdings auch gefiltert werden. Das Suchargument ist hierbei logisch mit einer ODER-Verknüpfung aufgebaut und durchsucht die Spalten '`complexid`, `name` und `organismus` in der `complexinfo`-Tabelle der zugrundeliegenden Datenbank nach Einträgen, die den Text/die Zahl aus der Suchanfrage beinhalten aber nicht zwingend identisch sind (`LIKE ?`).
+Beim Anzeigen des Servers im Browser unter der obigen Adresse erscheint eine Seite mit der Überschrift Proteinkomplexe und einer Suchleiste. Wird in die Suchleiste nichts eingegeben und auf `Enter` oder den Suchbutton geklickt wird, werden alle 5280 Proteinkomplexe paginiert aufgerufen und dargestellt. Über die Eingabe von Text oder einer Zahl (z.B. ein Bestandteil eines Komplexnamens oder einer Complex-ID) in die Suchleiste können die Einträge allerdings auch gefiltert werden. Das Suchargument ist hierbei logisch mit einer ODER-Verknüpfung aufgebaut und durchsucht die Spalten `complexid`, `name` und `organismus` in der `complexinfo`-Tabelle der zugrundeliegenden Datenbank nach Einträgen, die den Text/die Zahl aus der Suchanfrage beinhalten aber nicht zwingend identisch sind (`LIKE ?`).
 Die aufgelisteten Suchergebnisse sind nach aufsteigender Complex ID sortiert und paginiert. Pro Seite werden 10 Einträge angezeigt. Am Ende jeder Seite befinden sich Navigationstasten, die ein Vor- und Zurückbewegen innerhalb der Paginierung erlauben.
 
-Die Namen der einzelnen Einträge (Entries) sind anklickbar, und leiten den Benutzer auf eine Seite mit weiterführenden Informationen zu dem jeweiligen Eintrag weiter (z.B. http://localhost:1337/entries/1 für den Eintrag mit der Complex ID 1). Hier sind die allegemeine Informationen sowie Informationen zu den Untereinheiten des Proteinkomplexes, den Funktionen und den Referenzen (Kommentare, Methoden und PubMed ID der zugrundeliegenden Publikation) aufgeführt.  Die Informationen über die Funktionen und die Untereinheiten sind grafisch als Tabelle dargestellt.
+Die Namen der einzelnen Einträge (Entries) sind anklickbar, und leiten den Benutzer auf eine Seite mit weiterführenden Informationen zu dem jeweiligen Eintrag weiter (z.B. http://localhost:1337/entries/1 für den Eintrag mit der Complex ID 1). Hier sind die allegemeinen Informationen sowie Informationen zu den Untereinheiten des Proteinkomplexes, den Funktionen und den Referenzen (Kommentare, Methoden und PubMed ID der zugrundeliegenden Publikation) aufgeführt.  Die Informationen über die Funktionen und die Untereinheiten sind grafisch als Tabelle dargestellt.
 Für die UniProt ID, die Entrez ID, die GO ID und die PubMed ID sind zudem klickbare externe Links integriert die auf die Einträge der jeweiligen externen Datenbank verweisen.
 
-Am Ende jeder Entry-Seite befindet sich ein Zurück-Button, der auf das Ergebnis der letzten Suchanfrage zurückführt.
+Am Ende und am Anfang jeder Entry-Seite befindet sich ein Zurück-Button, der auf das Ergebnis der letzten Suchanfrage zurückführt.
 
 ## Beenden des Servers
 
